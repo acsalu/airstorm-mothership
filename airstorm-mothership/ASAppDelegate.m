@@ -16,6 +16,10 @@
     [Parse setApplicationId:@"n7N5WY2FgddzT9GagvvgEgNFYR4u2iRjP4CkCKK3"
                   clientKey:@"YzqN7TkJitqR9N2bCyfiaHyeJ4hM8ovEOoE69le7"];
     
+    _locationManager = [[CLLocationManager alloc] init];
+    _locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+    _locationManager.delegate = self;
+    [_locationManager startUpdatingLocation];
 }
 
 - (IBAction)runButtonPressed:(id)sender
@@ -67,6 +71,15 @@
     
     
     [webView.mainFrame loadHTMLString:ytHTML baseURL:nil];
+}
+
+#pragma mark - CLLocationManagerDelegate methods
+
+- (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation
+{
+    NSLog(@"%@", newLocation);
+    NSLog(@"moving %f m", [newLocation distanceFromLocation:oldLocation]);
+    _currentLocation = newLocation;
 }
 
 @end
