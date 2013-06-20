@@ -13,7 +13,32 @@
 		9065B6611773658E00C2A2E9 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 9065B65F1773658E00C2A2E9 /* Credits.rtf */; };
 		9065B6641773658E00C2A2E9 /* ASAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9065B6631773658E00C2A2E9 /* ASAppDelegate.m */; };
 		9065B6671773658E00C2A2E9 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9065B6651773658E00C2A2E9 /* MainMenu.xib */; };
+		9065B66E177365DF00C2A2E9 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9065B66D177365DF00C2A2E9 /* WebKit.framework */; };
+		9065B6701773667000C2A2E9 /* ParseOSX.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9065B66F1773667000C2A2E9 /* ParseOSX.framework */; };
+		9065B6721773672600C2A2E9 /* ParseOSX.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 9065B66F1773667000C2A2E9 /* ParseOSX.framework */; };
+		9065B687177367BF00C2A2E9 /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9065B685177367AE00C2A2E9 /* ApplicationServices.framework */; };
+		9065B689177367C300C2A2E9 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9065B688177367C300C2A2E9 /* CFNetwork.framework */; };
+		9065B68B177367C900C2A2E9 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9065B68A177367C800C2A2E9 /* CoreGraphics.framework */; };
+		9065B68D177367CF00C2A2E9 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9065B68C177367CF00C2A2E9 /* CoreLocation.framework */; };
+		9065B68F177367D400C2A2E9 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9065B68E177367D400C2A2E9 /* libsqlite3.dylib */; };
+		9065B691177367D900C2A2E9 /* libz.1.1.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9065B690177367D900C2A2E9 /* libz.1.1.3.dylib */; };
+		9065B693177367DD00C2A2E9 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9065B692177367DD00C2A2E9 /* QuartzCore.framework */; };
+		9065B695177367E200C2A2E9 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9065B694177367E200C2A2E9 /* Security.framework */; };
+		9065B697177367E600C2A2E9 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9065B696177367E600C2A2E9 /* SystemConfiguration.framework */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		9065B6711773671800C2A2E9 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				9065B6721773672600C2A2E9 /* ParseOSX.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		9065B64D1773658E00C2A2E9 /* airstorm-mothership.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "airstorm-mothership.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -29,6 +54,17 @@
 		9065B6621773658E00C2A2E9 /* ASAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ASAppDelegate.h; sourceTree = "<group>"; };
 		9065B6631773658E00C2A2E9 /* ASAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ASAppDelegate.m; sourceTree = "<group>"; };
 		9065B6661773658E00C2A2E9 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		9065B66D177365DF00C2A2E9 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
+		9065B66F1773667000C2A2E9 /* ParseOSX.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ParseOSX.framework; sourceTree = "<group>"; };
+		9065B685177367AE00C2A2E9 /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = System/Library/Frameworks/ApplicationServices.framework; sourceTree = SDKROOT; };
+		9065B688177367C300C2A2E9 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		9065B68A177367C800C2A2E9 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		9065B68C177367CF00C2A2E9 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		9065B68E177367D400C2A2E9 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
+		9065B690177367D900C2A2E9 /* libz.1.1.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.1.3.dylib; path = usr/lib/libz.1.1.3.dylib; sourceTree = SDKROOT; };
+		9065B692177367DD00C2A2E9 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		9065B694177367E200C2A2E9 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		9065B696177367E600C2A2E9 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -36,7 +72,18 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9065B697177367E600C2A2E9 /* SystemConfiguration.framework in Frameworks */,
+				9065B695177367E200C2A2E9 /* Security.framework in Frameworks */,
+				9065B693177367DD00C2A2E9 /* QuartzCore.framework in Frameworks */,
+				9065B691177367D900C2A2E9 /* libz.1.1.3.dylib in Frameworks */,
+				9065B68F177367D400C2A2E9 /* libsqlite3.dylib in Frameworks */,
+				9065B68D177367CF00C2A2E9 /* CoreLocation.framework in Frameworks */,
+				9065B68B177367C900C2A2E9 /* CoreGraphics.framework in Frameworks */,
+				9065B689177367C300C2A2E9 /* CFNetwork.framework in Frameworks */,
+				9065B687177367BF00C2A2E9 /* ApplicationServices.framework in Frameworks */,
+				9065B66E177365DF00C2A2E9 /* WebKit.framework in Frameworks */,
 				9065B6511773658E00C2A2E9 /* Cocoa.framework in Frameworks */,
+				9065B6701773667000C2A2E9 /* ParseOSX.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -46,6 +93,7 @@
 		9065B6441773658E00C2A2E9 = {
 			isa = PBXGroup;
 			children = (
+				9065B698177367EB00C2A2E9 /* Other Frameworks */,
 				9065B6561773658E00C2A2E9 /* airstorm-mothership */,
 				9065B64F1773658E00C2A2E9 /* Frameworks */,
 				9065B64E1773658E00C2A2E9 /* Products */,
@@ -63,6 +111,8 @@
 		9065B64F1773658E00C2A2E9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				9065B66F1773667000C2A2E9 /* ParseOSX.framework */,
+				9065B66D177365DF00C2A2E9 /* WebKit.framework */,
 				9065B6501773658E00C2A2E9 /* Cocoa.framework */,
 				9065B6521773658E00C2A2E9 /* Other Frameworks */,
 			);
@@ -72,6 +122,7 @@
 		9065B6521773658E00C2A2E9 /* Other Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				9065B685177367AE00C2A2E9 /* ApplicationServices.framework */,
 				9065B6531773658E00C2A2E9 /* AppKit.framework */,
 				9065B6541773658E00C2A2E9 /* CoreData.framework */,
 				9065B6551773658E00C2A2E9 /* Foundation.framework */,
@@ -102,6 +153,21 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		9065B698177367EB00C2A2E9 /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				9065B696177367E600C2A2E9 /* SystemConfiguration.framework */,
+				9065B694177367E200C2A2E9 /* Security.framework */,
+				9065B692177367DD00C2A2E9 /* QuartzCore.framework */,
+				9065B690177367D900C2A2E9 /* libz.1.1.3.dylib */,
+				9065B68E177367D400C2A2E9 /* libsqlite3.dylib */,
+				9065B68C177367CF00C2A2E9 /* CoreLocation.framework */,
+				9065B68A177367C800C2A2E9 /* CoreGraphics.framework */,
+				9065B688177367C300C2A2E9 /* CFNetwork.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -112,6 +178,7 @@
 				9065B6491773658E00C2A2E9 /* Sources */,
 				9065B64A1773658E00C2A2E9 /* Frameworks */,
 				9065B64B1773658E00C2A2E9 /* Resources */,
+				9065B6711773671800C2A2E9 /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -265,6 +332,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "airstorm-mothership/airstorm-mothership-Prefix.pch";
 				INFOPLIST_FILE = "airstorm-mothership/airstorm-mothership-Info.plist";
@@ -277,6 +348,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "airstorm-mothership/airstorm-mothership-Prefix.pch";
 				INFOPLIST_FILE = "airstorm-mothership/airstorm-mothership-Info.plist";
