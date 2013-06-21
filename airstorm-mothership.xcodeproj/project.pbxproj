@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		903DFEA41773FDDA00F63625 /* NSImage+OpenCV.mm in Sources */ = {isa = PBXBuildFile; fileRef = 903DFEA31773FDC100F63625 /* NSImage+OpenCV.mm */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		9065B6511773658E00C2A2E9 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9065B6501773658E00C2A2E9 /* Cocoa.framework */; };
 		9065B65B1773658E00C2A2E9 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9065B6591773658E00C2A2E9 /* InfoPlist.strings */; };
 		9065B65D1773658E00C2A2E9 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 9065B65C1773658E00C2A2E9 /* main.m */; };
@@ -25,6 +26,9 @@
 		9065B693177367DD00C2A2E9 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9065B692177367DD00C2A2E9 /* QuartzCore.framework */; };
 		9065B695177367E200C2A2E9 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9065B694177367E200C2A2E9 /* Security.framework */; };
 		9065B697177367E600C2A2E9 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9065B696177367E600C2A2E9 /* SystemConfiguration.framework */; };
+		9065B69C1773FCE200C2A2E9 /* libopencv_core.2.4.4.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9065B6991773FCE200C2A2E9 /* libopencv_core.2.4.4.dylib */; };
+		9065B69D1773FCE200C2A2E9 /* libopencv_highgui.2.4.4.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9065B69A1773FCE200C2A2E9 /* libopencv_highgui.2.4.4.dylib */; };
+		9065B69E1773FCE200C2A2E9 /* libopencv_imgproc.2.4.4.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9065B69B1773FCE200C2A2E9 /* libopencv_imgproc.2.4.4.dylib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -41,6 +45,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		903DFEA21773FDC100F63625 /* NSImage+OpenCV.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSImage+OpenCV.h"; sourceTree = "<group>"; };
+		903DFEA31773FDC100F63625 /* NSImage+OpenCV.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "NSImage+OpenCV.mm"; sourceTree = "<group>"; };
 		9065B64D1773658E00C2A2E9 /* airstorm-mothership.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "airstorm-mothership.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9065B6501773658E00C2A2E9 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		9065B6531773658E00C2A2E9 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -65,6 +71,9 @@
 		9065B692177367DD00C2A2E9 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		9065B694177367E200C2A2E9 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		9065B696177367E600C2A2E9 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		9065B6991773FCE200C2A2E9 /* libopencv_core.2.4.4.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_core.2.4.4.dylib; path = /usr/local/Cellar/opencv/2.4.4a/lib/libopencv_core.2.4.4.dylib; sourceTree = "<absolute>"; };
+		9065B69A1773FCE200C2A2E9 /* libopencv_highgui.2.4.4.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_highgui.2.4.4.dylib; path = /usr/local/Cellar/opencv/2.4.4a/lib/libopencv_highgui.2.4.4.dylib; sourceTree = "<absolute>"; };
+		9065B69B1773FCE200C2A2E9 /* libopencv_imgproc.2.4.4.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_imgproc.2.4.4.dylib; path = /usr/local/Cellar/opencv/2.4.4a/lib/libopencv_imgproc.2.4.4.dylib; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,6 +81,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9065B69C1773FCE200C2A2E9 /* libopencv_core.2.4.4.dylib in Frameworks */,
+				9065B69D1773FCE200C2A2E9 /* libopencv_highgui.2.4.4.dylib in Frameworks */,
+				9065B69E1773FCE200C2A2E9 /* libopencv_imgproc.2.4.4.dylib in Frameworks */,
 				9065B697177367E600C2A2E9 /* SystemConfiguration.framework in Frameworks */,
 				9065B695177367E200C2A2E9 /* Security.framework in Frameworks */,
 				9065B693177367DD00C2A2E9 /* QuartzCore.framework in Frameworks */,
@@ -135,6 +147,8 @@
 			children = (
 				9065B6621773658E00C2A2E9 /* ASAppDelegate.h */,
 				9065B6631773658E00C2A2E9 /* ASAppDelegate.m */,
+				903DFEA21773FDC100F63625 /* NSImage+OpenCV.h */,
+				903DFEA31773FDC100F63625 /* NSImage+OpenCV.mm */,
 				9065B6651773658E00C2A2E9 /* MainMenu.xib */,
 				9065B6571773658E00C2A2E9 /* Supporting Files */,
 			);
@@ -156,6 +170,9 @@
 		9065B698177367EB00C2A2E9 /* Other Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				9065B6991773FCE200C2A2E9 /* libopencv_core.2.4.4.dylib */,
+				9065B69A1773FCE200C2A2E9 /* libopencv_highgui.2.4.4.dylib */,
+				9065B69B1773FCE200C2A2E9 /* libopencv_imgproc.2.4.4.dylib */,
 				9065B696177367E600C2A2E9 /* SystemConfiguration.framework */,
 				9065B694177367E200C2A2E9 /* Security.framework */,
 				9065B692177367DD00C2A2E9 /* QuartzCore.framework */,
@@ -234,6 +251,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				903DFEA41773FDDA00F63625 /* NSImage+OpenCV.mm in Sources */,
 				9065B65D1773658E00C2A2E9 /* main.m in Sources */,
 				9065B6641773658E00C2A2E9 /* ASAppDelegate.m in Sources */,
 			);
@@ -331,6 +349,8 @@
 		9065B66B1773658E00C2A2E9 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
+				CLANG_CXX_LIBRARY = "libstdc++";
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -339,7 +359,12 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "airstorm-mothership/airstorm-mothership-Prefix.pch";
 				INFOPLIST_FILE = "airstorm-mothership/airstorm-mothership-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/usr/local/Cellar/opencv/2.4.4a/lib,
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				USER_HEADER_SEARCH_PATHS = /usr/local/include;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -347,6 +372,8 @@
 		9065B66C1773658E00C2A2E9 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
+				CLANG_CXX_LIBRARY = "libstdc++";
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -355,7 +382,12 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "airstorm-mothership/airstorm-mothership-Prefix.pch";
 				INFOPLIST_FILE = "airstorm-mothership/airstorm-mothership-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/usr/local/Cellar/opencv/2.4.4a/lib,
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				USER_HEADER_SEARCH_PATHS = /usr/local/include;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -379,6 +411,7 @@
 				9065B66C1773658E00C2A2E9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

@@ -22,6 +22,8 @@
     [_locationManager startUpdatingLocation];
 }
 
+#pragma mark - Testing IBActions
+
 - (IBAction)runButtonPressed:(id)sender
 {
     [self detectMarkerId:_markerId.intValue];
