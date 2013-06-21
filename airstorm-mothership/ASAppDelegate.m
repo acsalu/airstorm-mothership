@@ -20,6 +20,9 @@
     _locationManager.desiredAccuracy = kCLLocationAccuracyBest;
     _locationManager.delegate = self;
     [_locationManager startUpdatingLocation];
+    
+    _webView.autoresizesSubviews = YES;
+    _webView.autoresizingMask = YES;
 }
 
 #pragma mark - Testing IBActions
@@ -68,8 +71,8 @@
 - (void)playVideoForplayVideoForWebView:(WebView *)webView withVideoId:(NSString *)videoId
 {
     NSString *ytHTML = [NSString stringWithFormat:@"\
-                        <iframe width='%f' height='%f'\
-                        src='http://www.youtube.com/embed/%@'></iframe>", webView.frame.size.width, webView.frame.size.height, videoId];
+                        <iframe width='%f' height='%f' frameborder='0' style='margin:30px;-webkit-transform:rotate(15deg);'\
+                        src='http://www.youtube.com/embed/%@'></iframe>", 200.0f, 150.0f, videoId];
     
     
     [webView.mainFrame loadHTMLString:ytHTML baseURL:nil];
@@ -82,6 +85,13 @@
     NSLog(@"%@", newLocation);
     NSLog(@"moving %f m", [newLocation distanceFromLocation:oldLocation]);
     _currentLocation = newLocation;
+}
+
+#pragma mark - NSWindowDelegate methods
+
+- (void)windowWillClose:(NSNotification *)notification
+{
+    [NSApp terminate:self];
 }
 
 @end

@@ -12,7 +12,7 @@
 
 @class PFGeoPoint;
 
-@interface ASAppDelegate : NSObject <NSApplicationDelegate, CLLocationManagerDelegate>
+@interface ASAppDelegate : NSObject <NSApplicationDelegate, CLLocationManagerDelegate, NSWindowDelegate>
 
 @property (assign) IBOutlet NSWindow *window;
 @property (weak) IBOutlet NSTextField *markerId;
