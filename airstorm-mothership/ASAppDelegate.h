@@ -23,6 +23,7 @@
 @property (strong) CLLocation *currentLocation;
 
 - (IBAction)runButtonPressed:(id)sender;
+- (IBAction)calibrateButtonPressed:(id)sender;
 
 
 - (void)detectMarkerId:(int)markerId;

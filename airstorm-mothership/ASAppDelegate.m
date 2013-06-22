@@ -7,6 +7,7 @@
 //
 
 #import "ASAppDelegate.h"
+#import "ASCVUtility.h"
 #import <ParseOSX/Parse.h>
 
 @implementation ASAppDelegate
@@ -32,6 +33,11 @@
     [self detectMarkerId:_markerId.intValue];
 }
 
+- (IBAction)calibrateButtonPressed:(id)sender
+{
+    [ASCVUtility calibrate];
+}
+
 #pragma mark - Marker Detection methods
 
 - (void)detectMarkerId:(int)markerId
@@ -54,7 +60,6 @@
     }];
 }
 
-
 #pragma mark - Content Displaying methods
 
 - (void)showNotAssignedWarningForplayVideoForWebView:(WebView *)webView
@@ -71,8 +76,8 @@
 - (void)playVideoForplayVideoForWebView:(WebView *)webView withVideoId:(NSString *)videoId
 {
     NSString *ytHTML = [NSString stringWithFormat:@"\
-                        <iframe width='%f' height='%f' frameborder='0' style='margin:30px;-webkit-transform:rotate(15deg);'\
-                        src='http://www.youtube.com/embed/%@'></iframe>", 200.0f, 150.0f, videoId];
+                        <iframe width='%f' height='%f' frameborder='0' \
+                        src='http://www.youtube.com/embed/%@'></iframe>", webView.frame.size.width, webView.frame.size.height, videoId];
     
     
     [webView.mainFrame loadHTMLString:ytHTML baseURL:nil];

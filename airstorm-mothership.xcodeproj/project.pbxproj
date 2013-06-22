@@ -7,10 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		901D32B2177561C100E2DFFE /* libopencv_calib3d.2.4.4.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 901D32AD177561C100E2DFFE /* libopencv_calib3d.2.4.4.dylib */; };
+		901D32B3177561C100E2DFFE /* libopencv_core.2.4.4.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 901D32AE177561C100E2DFFE /* libopencv_core.2.4.4.dylib */; };
+		901D32B4177561C100E2DFFE /* libopencv_features2d.2.4.4.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 901D32AF177561C100E2DFFE /* libopencv_features2d.2.4.4.dylib */; };
+		901D32B5177561C100E2DFFE /* libopencv_highgui.2.4.4.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 901D32B0177561C100E2DFFE /* libopencv_highgui.2.4.4.dylib */; };
+		901D32B6177561C100E2DFFE /* libopencv_imgproc.2.4.4.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 901D32B1177561C100E2DFFE /* libopencv_imgproc.2.4.4.dylib */; };
+		902E6AA91775639100EAAEF9 /* ASCVUtility.mm in Sources */ = {isa = PBXBuildFile; fileRef = 902E6AA81775639100EAAEF9 /* ASCVUtility.mm */; };
 		903DFEA41773FDDA00F63625 /* NSImage+OpenCV.mm in Sources */ = {isa = PBXBuildFile; fileRef = 903DFEA31773FDC100F63625 /* NSImage+OpenCV.mm */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		903DFEA81774435D00F63625 /* libopencv_core.2.4.4.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 903DFEA51774435D00F63625 /* libopencv_core.2.4.4.dylib */; };
-		903DFEA91774435D00F63625 /* libopencv_highgui.2.4.4.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 903DFEA61774435D00F63625 /* libopencv_highgui.2.4.4.dylib */; };
-		903DFEAA1774435D00F63625 /* libopencv_imgproc.2.4.4.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 903DFEA71774435D00F63625 /* libopencv_imgproc.2.4.4.dylib */; };
 		9065B6511773658E00C2A2E9 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9065B6501773658E00C2A2E9 /* Cocoa.framework */; };
 		9065B65B1773658E00C2A2E9 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9065B6591773658E00C2A2E9 /* InfoPlist.strings */; };
 		9065B65D1773658E00C2A2E9 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 9065B65C1773658E00C2A2E9 /* main.m */; };
@@ -45,11 +48,15 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		901D32AD177561C100E2DFFE /* libopencv_calib3d.2.4.4.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_calib3d.2.4.4.dylib; path = /usr/local/Cellar/opencv/2.4.4a/lib/libopencv_calib3d.2.4.4.dylib; sourceTree = "<absolute>"; };
+		901D32AE177561C100E2DFFE /* libopencv_core.2.4.4.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_core.2.4.4.dylib; path = /usr/local/Cellar/opencv/2.4.4a/lib/libopencv_core.2.4.4.dylib; sourceTree = "<absolute>"; };
+		901D32AF177561C100E2DFFE /* libopencv_features2d.2.4.4.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_features2d.2.4.4.dylib; path = /usr/local/Cellar/opencv/2.4.4a/lib/libopencv_features2d.2.4.4.dylib; sourceTree = "<absolute>"; };
+		901D32B0177561C100E2DFFE /* libopencv_highgui.2.4.4.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_highgui.2.4.4.dylib; path = /usr/local/Cellar/opencv/2.4.4a/lib/libopencv_highgui.2.4.4.dylib; sourceTree = "<absolute>"; };
+		901D32B1177561C100E2DFFE /* libopencv_imgproc.2.4.4.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_imgproc.2.4.4.dylib; path = /usr/local/Cellar/opencv/2.4.4a/lib/libopencv_imgproc.2.4.4.dylib; sourceTree = "<absolute>"; };
+		902E6AA71775639100EAAEF9 /* ASCVUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASCVUtility.h; sourceTree = "<group>"; };
+		902E6AA81775639100EAAEF9 /* ASCVUtility.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ASCVUtility.mm; sourceTree = "<group>"; };
 		903DFEA21773FDC100F63625 /* NSImage+OpenCV.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSImage+OpenCV.h"; sourceTree = "<group>"; };
 		903DFEA31773FDC100F63625 /* NSImage+OpenCV.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "NSImage+OpenCV.mm"; sourceTree = "<group>"; };
-		903DFEA51774435D00F63625 /* libopencv_core.2.4.4.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_core.2.4.4.dylib; path = /usr/local/Cellar/opencv/2.4.4a/lib/libopencv_core.2.4.4.dylib; sourceTree = "<absolute>"; };
-		903DFEA61774435D00F63625 /* libopencv_highgui.2.4.4.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_highgui.2.4.4.dylib; path = /usr/local/Cellar/opencv/2.4.4a/lib/libopencv_highgui.2.4.4.dylib; sourceTree = "<absolute>"; };
-		903DFEA71774435D00F63625 /* libopencv_imgproc.2.4.4.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_imgproc.2.4.4.dylib; path = /usr/local/Cellar/opencv/2.4.4a/lib/libopencv_imgproc.2.4.4.dylib; sourceTree = "<absolute>"; };
 		9065B64D1773658E00C2A2E9 /* airstorm-mothership.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "airstorm-mothership.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9065B6501773658E00C2A2E9 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		9065B6531773658E00C2A2E9 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -81,16 +88,18 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				903DFEA81774435D00F63625 /* libopencv_core.2.4.4.dylib in Frameworks */,
-				903DFEA91774435D00F63625 /* libopencv_highgui.2.4.4.dylib in Frameworks */,
-				903DFEAA1774435D00F63625 /* libopencv_imgproc.2.4.4.dylib in Frameworks */,
+				901D32B2177561C100E2DFFE /* libopencv_calib3d.2.4.4.dylib in Frameworks */,
+				901D32B3177561C100E2DFFE /* libopencv_core.2.4.4.dylib in Frameworks */,
+				901D32B4177561C100E2DFFE /* libopencv_features2d.2.4.4.dylib in Frameworks */,
+				901D32B5177561C100E2DFFE /* libopencv_highgui.2.4.4.dylib in Frameworks */,
+				901D32B6177561C100E2DFFE /* libopencv_imgproc.2.4.4.dylib in Frameworks */,
+				9065B68B177367C900C2A2E9 /* CoreGraphics.framework in Frameworks */,
 				9065B697177367E600C2A2E9 /* SystemConfiguration.framework in Frameworks */,
 				9065B695177367E200C2A2E9 /* Security.framework in Frameworks */,
 				9065B693177367DD00C2A2E9 /* QuartzCore.framework in Frameworks */,
 				9065B691177367D900C2A2E9 /* libz.1.1.3.dylib in Frameworks */,
 				9065B68F177367D400C2A2E9 /* libsqlite3.dylib in Frameworks */,
 				9065B68D177367CF00C2A2E9 /* CoreLocation.framework in Frameworks */,
-				9065B68B177367C900C2A2E9 /* CoreGraphics.framework in Frameworks */,
 				9065B689177367C300C2A2E9 /* CFNetwork.framework in Frameworks */,
 				9065B687177367BF00C2A2E9 /* ApplicationServices.framework in Frameworks */,
 				9065B66E177365DF00C2A2E9 /* WebKit.framework in Frameworks */,
@@ -147,6 +156,8 @@
 			children = (
 				9065B6621773658E00C2A2E9 /* ASAppDelegate.h */,
 				9065B6631773658E00C2A2E9 /* ASAppDelegate.m */,
+				902E6AA71775639100EAAEF9 /* ASCVUtility.h */,
+				902E6AA81775639100EAAEF9 /* ASCVUtility.mm */,
 				903DFEA21773FDC100F63625 /* NSImage+OpenCV.h */,
 				903DFEA31773FDC100F63625 /* NSImage+OpenCV.mm */,
 				9065B6651773658E00C2A2E9 /* MainMenu.xib */,
@@ -170,9 +181,11 @@
 		9065B698177367EB00C2A2E9 /* Other Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				903DFEA51774435D00F63625 /* libopencv_core.2.4.4.dylib */,
-				903DFEA61774435D00F63625 /* libopencv_highgui.2.4.4.dylib */,
-				903DFEA71774435D00F63625 /* libopencv_imgproc.2.4.4.dylib */,
+				901D32AD177561C100E2DFFE /* libopencv_calib3d.2.4.4.dylib */,
+				901D32AE177561C100E2DFFE /* libopencv_core.2.4.4.dylib */,
+				901D32AF177561C100E2DFFE /* libopencv_features2d.2.4.4.dylib */,
+				901D32B0177561C100E2DFFE /* libopencv_highgui.2.4.4.dylib */,
+				901D32B1177561C100E2DFFE /* libopencv_imgproc.2.4.4.dylib */,
 				9065B696177367E600C2A2E9 /* SystemConfiguration.framework */,
 				9065B694177367E200C2A2E9 /* Security.framework */,
 				9065B692177367DD00C2A2E9 /* QuartzCore.framework */,
@@ -254,6 +267,7 @@
 				903DFEA41773FDDA00F63625 /* NSImage+OpenCV.mm in Sources */,
 				9065B65D1773658E00C2A2E9 /* main.m in Sources */,
 				9065B6641773658E00C2A2E9 /* ASAppDelegate.m in Sources */,
+				902E6AA91775639100EAAEF9 /* ASCVUtility.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -363,6 +377,7 @@
 					"$(inherited)",
 					/usr/local/Cellar/opencv/2.4.4a/lib,
 				);
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				USER_HEADER_SEARCH_PATHS = /usr/local/include;
 				WRAPPER_EXTENSION = app;
@@ -386,6 +401,7 @@
 					"$(inherited)",
 					/usr/local/Cellar/opencv/2.4.4a/lib,
 				);
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				USER_HEADER_SEARCH_PATHS = /usr/local/include;
 				WRAPPER_EXTENSION = app;
