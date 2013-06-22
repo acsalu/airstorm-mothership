@@ -8,6 +8,7 @@
 
 #import "ASAppDelegate.h"
 #import "ASCVUtility.h"
+#import "ASMarkerDetector.h"
 #import <ParseOSX/Parse.h>
 
 @implementation ASAppDelegate
@@ -37,6 +38,12 @@
 {
     [ASCVUtility calibrate];
 }
+
+- (IBAction)detectButtonPressed:(id)sender
+{
+    [ASMarkerDetector detect];
+}
+
 
 #pragma mark - Marker Detection methods
 

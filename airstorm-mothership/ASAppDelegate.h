@@ -24,6 +24,7 @@
 
 - (IBAction)runButtonPressed:(id)sender;
 - (IBAction)calibrateButtonPressed:(id)sender;
+- (IBAction)detectButtonPressed:(id)sender;
 
 
 - (void)detectMarkerId:(int)markerId;
