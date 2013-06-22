@@ -7,6 +7,7 @@
 //
 
 #import "ASMarkerDetector.h"
+#import "ASAppDelegate.h"
 #include <iostream>
 #include <opencv2/opencv.hpp>
 #include "aruco.h"
@@ -84,6 +85,9 @@ using namespace aruco;
                 for (unsigned int i=0;i<Markers.size();i++) {
                     cout<<Markers[i]<<endl;
                     Markers[i].draw(InImage,Scalar(0,0,255),2);
+                    
+                    [((ASAppDelegate *)[NSApp delegate]) detectMarkerId:Markers[i].id];
+                    
                 }
                 //                //draw a 3d cube in each marker if there is 3d info
                 if (  CamParam.isValid() && MarkerSize!=-1) {
