@@ -7,10 +7,10 @@
 //
 
 #import "ASCVUtility.h"
-#include "opencv2/core/core.hpp"
-#include "opencv2/imgproc/imgproc.hpp"
-#include "opencv2/calib3d/calib3d.hpp"
-#include "opencv2/highgui/highgui.hpp"
+#include <opencv2/core/core.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/calib3d/calib3d.hpp>
+#include <opencv2/highgui/highgui.hpp>
 
 #include <cctype>
 #include <stdio.h>
@@ -191,8 +191,11 @@ static bool runAndSave(const string&, const vector<vector<Point2f> >&, cv::Size,
             if( runAndSave(outputFilename, imagePoints, imageSize,
                            boardSize, pattern, squareSize, aspectRatio,
                            flags, cameraMatrix, distCoeffs,
-                           writeExtrinsics, writePoints))
+                           writeExtrinsics, writePoints)) {
                 mode = CALIBRATED;
+                cvDestroyWindow("Calibration View");
+                return;
+            }
             else
                 mode = DETECTION;
             if( !capture.isOpened() )
