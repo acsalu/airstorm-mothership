@@ -59,7 +59,7 @@
                 [self showNotAssignedWarningForplayVideoForWebView:_webView];
             } else {
                 NSLog(@"videoId: %@", objects[0][@"videoId"]);
-                [self playVideoForplayVideoForWebView:_webView withVideoId:objects[0][@"videoId"]];
+                [self playVideoForWebView:_webView withVideoId:objects[0][@"videoId"]];
             }
         } else {
             NSLog(@"Error: %@", error);
@@ -80,7 +80,7 @@
 }
 
 
-- (void)playVideoForplayVideoForWebView:(WebView *)webView withVideoId:(NSString *)videoId
+- (void)playVideoForWebView:(WebView *)webView withVideoId:(NSString *)videoId
 {
     NSString *ytHTML = [NSString stringWithFormat:@"\
                         <iframe width='%f' height='%f' frameborder='0' \

@@ -32,6 +32,8 @@ using namespace aruco;
 //    Mat marker = aruco::FiducidalMarkers::createMarkerImage(2,500);
 //    cv::imwrite("/Users/LCR/Downloads/image.jpg",marker);
     
+    bool isDetected = NO;
+    
     try
     {
         
@@ -80,14 +82,17 @@ using namespace aruco;
                 //Ok, let's detect
                 MDetector.detect(InImage,Markers,CamParam,MarkerSize);
                 //for each marker, draw info and its boundaries in the image
-                cout<<"size:"<<Markers.size()<<endl;
+//                cout<<"size:"<<Markers.size()<<endl;
                 
                 for (unsigned int i=0;i<Markers.size();i++) {
                     cout<<Markers[i]<<endl;
                     Markers[i].draw(InImage,Scalar(0,0,255),2);
                     
-                    [((ASAppDelegate *)[NSApp delegate]) detectMarkerId:Markers[i].id];
-                    
+                    if (!isDetected) {
+                        cout << "Detecte Marker" << endl;
+                        [((ASAppDelegate *)[NSApp delegate]) detectMarkerId:Markers[i].id];
+                        isDetected = YES;
+                    }
                 }
                 //                //draw a 3d cube in each marker if there is 3d info
                 if (  CamParam.isValid() && MarkerSize!=-1) {
