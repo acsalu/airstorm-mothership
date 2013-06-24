@@ -77,10 +77,10 @@ const NSSize DefaultMediaFrameSize = {320, 240};
                     NSLog(@"media exists");
                     CGPoint p = [self positionRelativeToProjection:absPosition];
                     float ratio = [self scaleRatioOfProjection];
-                    [self createDisplayForMarker:markerId WithFrame:NSMakeRect(p.x,
-                                                                               p.y,
-                                                                               DefaultMediaFrameSize.width * ratio,
-                                                                               DefaultMediaFrameSize.height * ratio)];
+                    [self createDisplayForMarker:markerId WithData:objects[0] andFrame:NSMakeRect(p.x,
+                                                                                                  p.y,
+                                                                                                  DefaultMediaFrameSize.width * ratio,
+                                                                                                  DefaultMediaFrameSize.height * ratio)];
                 }
             } else {
                 NSLog(@"Error: %@", error);
@@ -106,25 +106,41 @@ const NSSize DefaultMediaFrameSize = {320, 240};
     [webView.mainFrame loadHTMLString:@"NO MEDIA ASSIGNED YET!" baseURL:nil];
 }
 
-- (void)createDisplayForMarker:(int)markerId WithFrame:(CGRect)frame
+- (void)createDisplayForMarker:(int)markerId WithData:(id)data andFrame:(CGRect)frame
 {
     WebView *mediaView = [[WebView alloc] initWithFrame:frame];
     [self.window.contentView addSubview:mediaView];
     [_mediaFrames setObject:mediaView forKey:@(markerId)];
     
-    NSLog(@"videoId: %d", markerId);
-    [self playVideoForWebView:mediaView withVideoId:markerId];
+    NSLog(@"mediaId: %d", markerId);
+    NSString *type = data[@"type"];
+    if ([type isEqualToString:@"video"])
+        [self playVideoForWebView:mediaView withVideoId:data[@"videoId"]];
+    else if ([type isEqualToString:@"image"])
+        [self playImageForWebView:mediaView withImageURL:data[@"imageURL"]];
+    else if ([type isEqualToString:@"photo"])
+        [self playImageForWebView:mediaView withImageURL:((PFFile *) data[@"photoFile"]).url];;
+        
     
     [self performSelector:@selector(destroyMediaFrameOfMarker:) withObject:@(markerId) afterDelay:5];
 }
 
 
-- (void)playVideoForWebView:(WebView *)webView withVideoId:(int)videoId
+- (void)playVideoForWebView:(WebView *)webView withVideoId:(NSString *)videoId
 {
     NSString *ytHTML = [NSString stringWithFormat:@"\
                         <iframe width='%f' height='%f' frameborder='0' \
-                        src='http://www.youtube.com/embed/%d'></iframe>", webView.frame.size.width, webView.frame.size.height, videoId];
+                        src='http://www.youtube.com/embed/%@'></iframe>", webView.frame.size.width, webView.frame.size.height, videoId];
 
+    [webView.mainFrame loadHTMLString:ytHTML baseURL:nil];
+}
+
+- (void)playImageForWebView:(WebView *)webView withImageURL:(NSString *)imageURL;
+{
+    NSString *ytHTML = [NSString stringWithFormat:@"\
+                        <img width='%f' height='%f' frameborder='0' \
+                        src='%@'></img>", webView.frame.size.width, webView.frame.size.height, imageURL];
+    
     [webView.mainFrame loadHTMLString:ytHTML baseURL:nil];
 }
 

@@ -32,9 +32,10 @@ extern const CGSize DefaultMediaFrameSize;
 
 
 - (void)detectMarkerId:(int)markerId atAbsPosition:(CGPoint)absPosition;
-- (void)playVideoForWebView:(WebView *)webView withVideoId:(int)videoId;
+- (void)playVideoForWebView:(WebView *)webView withVideoId:(NSString *)videoId;
+- (void)playImageForWebView:(WebView *)webView withImageURL:(NSString *)imageURL;
 - (void)showNotAssignedWarningForplayVideoForWebView:(WebView *)webView;
-- (void)createDisplayForMarker:(int)markerId WithFrame:(CGRect)frame;
+- (void)createDisplayForMarker:(int)markerId WithData:(id)data andFrame:(CGRect)frame;
 
 
 ////
