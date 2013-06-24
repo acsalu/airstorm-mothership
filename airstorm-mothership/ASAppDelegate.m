@@ -73,7 +73,6 @@ const NSSize DefaultMediaFrameSize = {320, 240};
             if (!error) {
                 if (objects.count == 0) {
                     NSLog(@"no video set");
-    //                [self showNotAssignedWarningForplayVideoForWebView:_webView];
                 } else {
                     NSLog(@"media exists");
                     CGPoint p = [self positionRelativeToProjection:absPosition];
@@ -90,9 +89,13 @@ const NSSize DefaultMediaFrameSize = {320, 240};
         }];
     } else if (mediaView != nil){
         // change location
+        [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(destroyMediaFrameOfMarker:) object:@(markerId)];
+        
         CGPoint p = [self positionRelativeToProjection:absPosition];
         float ratio = [self scaleRatioOfProjection];
         mediaView.frame = NSMakeRect(p.x, p.y, DefaultMediaFrameSize.width * ratio, DefaultMediaFrameSize.height * ratio);
+        
+        [self performSelector:@selector(destroyMediaFrameOfMarker:) withObject:@(markerId) afterDelay:5];
     }
 }
 
@@ -111,6 +114,8 @@ const NSSize DefaultMediaFrameSize = {320, 240};
     
     NSLog(@"videoId: %d", markerId);
     [self playVideoForWebView:mediaView withVideoId:markerId];
+    
+    [self performSelector:@selector(destroyMediaFrameOfMarker:) withObject:@(markerId) afterDelay:5];
 }
 
 
@@ -121,6 +126,13 @@ const NSSize DefaultMediaFrameSize = {320, 240};
                         src='http://www.youtube.com/embed/%d'></iframe>", webView.frame.size.width, webView.frame.size.height, videoId];
 
     [webView.mainFrame loadHTMLString:ytHTML baseURL:nil];
+}
+
+- (void)destroyMediaFrameOfMarker:(NSNumber *)markerId
+{
+    WebView *mediaView = [_mediaFrames objectForKey:markerId];
+    [mediaView removeFromSuperview];
+    [_mediaFrames removeObjectForKey:markerId];
 }
 
 #pragma mark - CLLocationManagerDelegate methods
