@@ -32,7 +32,7 @@ using namespace aruco;
 //    Mat marker = aruco::FiducidalMarkers::createMarkerImage(2,500);
 //    cv::imwrite("/Users/LCR/Downloads/image.jpg",marker);
     
-    bool isDetected = NO;
+//    bool isDetected = NO;
     
     try
     {
@@ -62,6 +62,8 @@ using namespace aruco;
         
         if( capture )
         {
+            ASAppDelegate* appDelegate = ((ASAppDelegate *)[NSApp delegate]);
+            
             cout << "In capture ..." << endl;
             for(;;)
             {
@@ -85,14 +87,37 @@ using namespace aruco;
 //                cout<<"size:"<<Markers.size()<<endl;
                 
                 for (unsigned int i=0;i<Markers.size();i++) {
-                    cout<<Markers[i]<<endl;
-                    Markers[i].draw(InImage,Scalar(0,0,255),2);
+                    aruco::Marker marker = Markers[i];
+                    marker.draw(InImage,Scalar(0,0,255),2);
                     
-                    if (!isDetected) {
+//                    if (marker.id == 0) {
+//                        cv::Point2f p = centerOfMarker(marker);
+//                        appDelegate.corner_lt = CGPointMake(p.x, p.y);
+//                        continue;
+//                    } else if (marker.id == 1) {
+//                        cv::Point2f p = centerOfMarker(marker);
+//                        appDelegate.corner_rt = CGPointMake(p.x, p.y);
+//                        continue;
+//                    } else if (marker.id == 2) {
+//                        cv::Point2f p = centerOfMarker(marker);
+//                        appDelegate.corner_rb = CGPointMake(p.x, p.y);
+//                        continue;
+//                    } else if (marker.id == 3) {
+//                        cv::Point2f p = centerOfMarker(marker);
+//                        appDelegate.corner_lb = CGPointMake(p.x, p.y);
+//                        continue;
+//                    }
+                    
+                    // support only one marker
+//                    if (!isDetected) {
                         cout << "Detecte Marker" << endl;
-                        [((ASAppDelegate *)[NSApp delegate]) detectMarkerId:Markers[i].id];
-                        isDetected = YES;
-                    }
+                        
+                        cv::Point2f p = centerOfMarker(marker);
+                        
+                        [appDelegate detectMarkerId:marker.id atAbsPosition:CGPointMake(p.x, p.y)];
+//                        isDetected = YES;
+//                    }
+                    
                 }
                 //                //draw a 3d cube in each marker if there is 3d info
                 if (  CamParam.isValid() && MarkerSize!=-1) {
@@ -100,12 +125,7 @@ using namespace aruco;
                         CvDrawingUtils::draw3dCube(InImage,Markers[i],CamParam);
                     }
                 }
-                //show input with augmented information
                 cv::imshow("Marker Detector",InImage);
-                //show also the internal image resulting from the threshold operation
-                //                cv::imshow("thes", MDetector.getThresholdedImage() );
-                //                cv::waitKey(0);//wait for key to be pressed
-                
             }
             
             waitKey(0);
@@ -121,5 +141,13 @@ using namespace aruco;
     }
     
 }
+
+cv::Point2f centerOfMarker(aruco::Marker marker)
+{
+    float x = marker[0].x + marker[1].x + marker[2].x + marker[3].x;
+    float y = marker[0].y + marker[1].y + marker[2].y + marker[3].y;
+    return cv::Point2f(x/4, y/4);
+}
+
 
 @end
