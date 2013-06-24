@@ -45,7 +45,6 @@ static bool runAndSave(const string&, const vector<vector<Point2f> >&, cv::Size,
     float squareSize = 1.f, aspectRatio = 1.f;
     Mat cameraMatrix, distCoeffs;
     const char* outputFilename = "/tmp/airtorm-camarea-calibration.yml";
-    const char* inputFilename = 0;
     
     int i, nframes = 10;
     bool writeExtrinsics = false, writePoints = false;
@@ -54,7 +53,6 @@ static bool runAndSave(const string&, const vector<vector<Point2f> >&, cv::Size,
     VideoCapture capture;
     bool flipVertical = false;
     bool showUndistorted = false;
-    bool videofile = false;
     int delay = 1000;
     clock_t prevTimestamp = 0;
     int mode = DETECTION;

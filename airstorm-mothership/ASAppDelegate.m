@@ -38,12 +38,6 @@ const NSSize DefaultMediaFrameSize = {320, 240};
 //    _webView.autoresizesSubviews = YES;
 //    _webView.autoresizingMask = YES;
     
-//    WebView *testWebView = [[WebView alloc] initWithFrame:NSMakeRect(50, 50, DefaultMediaFrameSize.width, DefaultMediaFrameSize.height)];
-////    [testWebView setWantsLayer:YES];
-//    
-//    [self.window.contentView addSubview:testWebView];
-//    self.webView = testWebView;
-    
 }
 
 #pragma mark - Testing IBActions
@@ -121,13 +115,7 @@ const NSSize DefaultMediaFrameSize = {320, 240};
     NSString *ytHTML = [NSString stringWithFormat:@"\
                         <iframe width='%f' height='%f' frameborder='0' \
                         src='http://www.youtube.com/embed/%@'></iframe>", webView.frame.size.width, webView.frame.size.height, videoId];
-    
-//    NSString *ytHTML = [NSString stringWithFormat:@"\
-                        <div width='%f' height='%f' frameborder='0' style='color:red;' \
-                        ></div>", webView.frame.size.width, webView.frame.size.height];
 
-    
-    
     [webView.mainFrame loadHTMLString:ytHTML baseURL:nil];
 }
 
@@ -150,9 +138,13 @@ const NSSize DefaultMediaFrameSize = {320, 240};
 
 - (CGPoint)positionRelativeToProjection:(CGPoint)absPosiotn
 {
-    NSLog(@"Absolute Position :%f, %f", absPosiotn.x, absPosiotn.y);
+    float projectionImageWidth = _corner_rt.x - _corner_lb.x;
+    float projectionImageHeight = _corner_rt.y - _corner_lb.y;
     
-    return CGPointMake(absPosiotn.x - self.corner_lb.x, (480-absPosiotn.y) - self.corner_lb.y);
+    float x = (absPosiotn.x - self.corner_lb.x) * projectionImageWidth/ProjectorResolutionWidth;
+    float y = (([ASMarkerDetector cameraResolutionHeight] - absPosiotn.y) - self.corner_lb.y) * projectionImageHeight/ProjectorResolutionHeight;
+    
+    return CGPointMake(x, y);
 }
 
 @end

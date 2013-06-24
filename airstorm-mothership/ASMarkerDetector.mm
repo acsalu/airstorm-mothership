@@ -19,21 +19,13 @@ using namespace std;
 using namespace cv;
 using namespace aruco;
 
+static int resolutionWidth = 0;
+static int resolutionHeight = 0;
 
 @implementation ASMarkerDetector
 
 + (void)detect
 {
-    
-    //    namedWindow("image", CV_WINDOW_AUTOSIZE);
-    //    imshow("image", img);
-    //    waitKey();
-    
-//    Mat marker = aruco::FiducidalMarkers::createMarkerImage(2,500);
-//    cv::imwrite("/Users/LCR/Downloads/image.jpg",marker);
-    
-//    bool isDetected = NO;
-    
     try
     {
         
@@ -49,8 +41,6 @@ using namespace aruco;
             [alert beginSheetModalForWindow:nil modalDelegate:nil didEndSelector:nil contextInfo:nil];
             return;
         }
-//        CamParam.resize(InImage.size());
-        
         
         CvCapture* capture = 0;
         Mat frame, frameCopy, image;
@@ -81,6 +71,9 @@ using namespace aruco;
                 
                 cv::Mat InImage(frame);
                 
+                resolutionWidth = InImage.cols;
+                resolutionHeight = InImage.rows;
+                
                 //Ok, let's detect
                 MDetector.detect(InImage,Markers,CamParam,MarkerSize);
                 //for each marker, draw info and its boundaries in the image
@@ -90,34 +83,29 @@ using namespace aruco;
                     aruco::Marker marker = Markers[i];
                     marker.draw(InImage,Scalar(0,0,255),2);
                     
-//                    if (marker.id == 0) {
-//                        cv::Point2f p = centerOfMarker(marker);
-//                        appDelegate.corner_lt = CGPointMake(p.x, p.y);
-//                        continue;
-//                    } else if (marker.id == 1) {
-//                        cv::Point2f p = centerOfMarker(marker);
-//                        appDelegate.corner_rt = CGPointMake(p.x, p.y);
-//                        continue;
-//                    } else if (marker.id == 2) {
-//                        cv::Point2f p = centerOfMarker(marker);
-//                        appDelegate.corner_rb = CGPointMake(p.x, p.y);
-//                        continue;
-//                    } else if (marker.id == 3) {
-//                        cv::Point2f p = centerOfMarker(marker);
-//                        appDelegate.corner_lb = CGPointMake(p.x, p.y);
-//                        continue;
-//                    }
-                    
-                    // support only one marker
-//                    if (!isDetected) {
-                        cout << "Detecte Marker" << endl;
-                        
+                    if (marker.id == 0) {
                         cv::Point2f p = centerOfMarker(marker);
-                        
-                        [appDelegate detectMarkerId:marker.id atAbsPosition:CGPointMake(p.x, p.y)];
-//                        isDetected = YES;
-//                    }
+                        appDelegate.corner_lt = CGPointMake(p.x, p.y);
+                        continue;
+                    } else if (marker.id == 1) {
+                        cv::Point2f p = centerOfMarker(marker);
+                        appDelegate.corner_rt = CGPointMake(p.x, p.y);
+                        continue;
+                    } else if (marker.id == 2) {
+                        cv::Point2f p = centerOfMarker(marker);
+                        appDelegate.corner_rb = CGPointMake(p.x, p.y);
+                        continue;
+                    } else if (marker.id == 3) {
+                        cv::Point2f p = centerOfMarker(marker);
+                        appDelegate.corner_lb = CGPointMake(p.x, p.y);
+                        continue;
+                    }
                     
+                    cout << "Detecte marker , marker ID: " << marker.id << endl;
+                    
+                    cv::Point2f p = centerOfMarker(marker);
+                    
+                    [appDelegate detectMarkerId:marker.id atAbsPosition:CGPointMake(p.x, p.y)];
                 }
                 //                //draw a 3d cube in each marker if there is 3d info
                 if (  CamParam.isValid() && MarkerSize!=-1) {
@@ -134,12 +122,23 @@ using namespace aruco;
             
         }
         
-    } catch (std::exception &ex)
-    
-    {
-        cout<<"Exception :"<<ex.what()<<endl;
     }
     
+    catch (std::exception &ex)
+    {
+        cout << "Exception :" << ex.what() << endl;
+    }
+    
+}
+
++ (int)cameraResolutionWidth
+{
+    return resolutionWidth;
+}
+
++ (int)cameraResolutionHeight
+{
+    return resolutionHeight;
 }
 
 cv::Point2f centerOfMarker(aruco::Marker marker)

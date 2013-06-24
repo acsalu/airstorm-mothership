@@ -12,4 +12,7 @@
 
 + (void)detect;
 
++ (int)cameraResolutionWidth;
++ (int)cameraResolutionHeight;
+
 @end
