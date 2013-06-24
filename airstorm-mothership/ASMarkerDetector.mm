@@ -19,8 +19,8 @@ using namespace std;
 using namespace cv;
 using namespace aruco;
 
-static int resolutionWidth = 0;
-static int resolutionHeight = 0;
+static int cameraResolutionWidth = 0;
+static int cameraResolutionHeight = 0;
 
 @implementation ASMarkerDetector
 
@@ -28,7 +28,6 @@ static int resolutionHeight = 0;
 {
     try
     {
-        
         aruco::CameraParameters CamParam;
         MarkerDetector MDetector;
         vector<aruco::Marker> Markers;
@@ -71,8 +70,8 @@ static int resolutionHeight = 0;
                 
                 cv::Mat InImage(frame);
                 
-                resolutionWidth = InImage.cols;
-                resolutionHeight = InImage.rows;
+                cameraResolutionWidth = InImage.cols;
+                cameraResolutionHeight = InImage.rows;
                 
                 //Ok, let's detect
                 MDetector.detect(InImage,Markers,CamParam,MarkerSize);
@@ -133,12 +132,12 @@ static int resolutionHeight = 0;
 
 + (int)cameraResolutionWidth
 {
-    return resolutionWidth;
+    return cameraResolutionWidth;
 }
 
 + (int)cameraResolutionHeight
 {
-    return resolutionHeight;
+    return cameraResolutionHeight;
 }
 
 cv::Point2f centerOfMarker(aruco::Marker marker)

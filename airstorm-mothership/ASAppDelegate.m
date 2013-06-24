@@ -23,6 +23,7 @@ const NSSize DefaultMediaFrameSize = {320, 240};
     [Parse setApplicationId:@"n7N5WY2FgddzT9GagvvgEgNFYR4u2iRjP4CkCKK3"
                   clientKey:@"YzqN7TkJitqR9N2bCyfiaHyeJ4hM8ovEOoE69le7"];
     
+    [_window setBackgroundColor:[NSColor blackColor]];
     _mediaFrames = [NSMutableDictionary dictionary];
     
     _locationManager = [[CLLocationManager alloc] init];
@@ -76,13 +77,11 @@ const NSSize DefaultMediaFrameSize = {320, 240};
                 } else {
                     NSLog(@"media exists");
                     CGPoint p = [self positionRelativeToProjection:absPosition];
-                    WebView *mediaView = [[WebView alloc] initWithFrame:NSMakeRect(p.x, p.y, DefaultMediaFrameSize.width, DefaultMediaFrameSize.height)];
-                    [self.window.contentView addSubview:mediaView];
-                    [_mediaFrames setObject:mediaView forKey:@(markerId)];
-                    
-                    NSLog(@"videoId: %@", objects[0][@"videoId"]);
-    //                [self playVideoForWebView:_webView withVideoId:objects[0][@"videoId"]];
-                    [self playVideoForWebView:mediaView withVideoId:objects[0][@"videoId"]];
+                    float ratio = [self scaleRatioOfProjection];
+                    [self createDisplayForMarker:markerId WithFrame:NSMakeRect(p.x,
+                                                                               p.y,
+                                                                               DefaultMediaFrameSize.width * ratio,
+                                                                               DefaultMediaFrameSize.height * ratio)];
                 }
             } else {
                 NSLog(@"Error: %@", error);
@@ -91,9 +90,9 @@ const NSSize DefaultMediaFrameSize = {320, 240};
         }];
     } else if (mediaView != nil){
         // change location
-        WebView *mediaView = [_mediaFrames objectForKey:@(markerId)];
         CGPoint p = [self positionRelativeToProjection:absPosition];
-        mediaView.frame = NSMakeRect(p.x, p.y, DefaultMediaFrameSize.width, DefaultMediaFrameSize.height);
+        float ratio = [self scaleRatioOfProjection];
+        mediaView.frame = NSMakeRect(p.x, p.y, DefaultMediaFrameSize.width * ratio, DefaultMediaFrameSize.height * ratio);
     }
 }
 
@@ -104,17 +103,22 @@ const NSSize DefaultMediaFrameSize = {320, 240};
     [webView.mainFrame loadHTMLString:@"NO MEDIA ASSIGNED YET!" baseURL:nil];
 }
 
-- (void)createDisplayWithFrame:(CGRect)frame
+- (void)createDisplayForMarker:(int)markerId WithFrame:(CGRect)frame
 {
+    WebView *mediaView = [[WebView alloc] initWithFrame:frame];
+    [self.window.contentView addSubview:mediaView];
+    [_mediaFrames setObject:mediaView forKey:@(markerId)];
     
+    NSLog(@"videoId: %d", markerId);
+    [self playVideoForWebView:mediaView withVideoId:markerId];
 }
 
 
-- (void)playVideoForWebView:(WebView *)webView withVideoId:(NSString *)videoId
+- (void)playVideoForWebView:(WebView *)webView withVideoId:(int)videoId
 {
     NSString *ytHTML = [NSString stringWithFormat:@"\
                         <iframe width='%f' height='%f' frameborder='0' \
-                        src='http://www.youtube.com/embed/%@'></iframe>", webView.frame.size.width, webView.frame.size.height, videoId];
+                        src='http://www.youtube.com/embed/%d'></iframe>", webView.frame.size.width, webView.frame.size.height, videoId];
 
     [webView.mainFrame loadHTMLString:ytHTML baseURL:nil];
 }
@@ -145,6 +149,12 @@ const NSSize DefaultMediaFrameSize = {320, 240};
     float y = (([ASMarkerDetector cameraResolutionHeight] - absPosiotn.y) - self.corner_lb.y) * projectionImageHeight/ProjectorResolutionHeight;
     
     return CGPointMake(x, y);
+}
+
+// according to width
+- (float)scaleRatioOfProjection
+{
+    return (_corner_rt.x - _corner_lb.x) / ProjectorResolutionWidth;
 }
 
 @end
