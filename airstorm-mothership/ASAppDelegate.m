@@ -152,9 +152,12 @@ NSSize DefaultMediaFrameSize = {320, 240};
                         </script>\
                         </body>\
                         </html>", webView.frame.size.height, webView.frame.size.width, videoId];
+    
+    NSLog(@"%@", ytHTML);
+    
 
     [webView.mainFrame loadHTMLString:ytHTML baseURL:nil];
-    [self performSelector:@selector(markerIsPressed:) withObject:nil afterDelay:3];
+    [self performSelector:@selector(markerIsPressed:) withObject:@(99) afterDelay:3];
 }
 
 - (void)playImageForWebView:(WebView *)webView withImageURL:(NSString *)imageURL;
@@ -220,6 +223,9 @@ NSSize DefaultMediaFrameSize = {320, 240};
     NSLog(@"sooooooooong laaaaaa%@", markerId);
     WebView *mediaView = [_mediaFrames objectForKey:markerId];
     
+    id win = [mediaView windowScriptObject];
+    NSLog(@"player: %@", [win valueForKey:@"player"]);
+    
     NSString *script;
     if ([[_playStatus objectForKey:markerId] isEqual:@(PLAY)]) {
         script = @"player.pauseVideo();";
@@ -228,7 +234,12 @@ NSSize DefaultMediaFrameSize = {320, 240};
         script = @"player.playVideo();";
     }
     
-    [mediaView stringByEvaluatingJavaScriptFromString:script];
+    [[win valueForKey:@"player"] evaluateWebScript:@"playVideo();"];
+    
+    
+//    if (![[mediaView windowScriptObject] evaluateWebScript:@"alert('xdd');"]) {
+//        NSLog(@"sucks");
+//    };
     
 }
 
