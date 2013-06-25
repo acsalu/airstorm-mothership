@@ -20,7 +20,7 @@
 - (void)markerIsPressed:(NSNumber *)markerId;
 // QQ
 - (NSRect)getFrameOfMarker:(NSNumber *)markerId;
-
+- (float)scaleRatioOfProjection;
 @end
 
 @interface ASMarkerDetector : NSObject

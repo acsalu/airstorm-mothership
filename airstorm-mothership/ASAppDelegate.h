@@ -39,6 +39,7 @@ extern NSSize DefaultMediaFrameSize;
 - (void)showNotAssignedWarningForplayVideoForWebView:(WebView *)webView;
 - (void)createDisplayForMarker:(int)markerId WithData:(id)data andFrame:(CGRect)frame;
 
+- (float)scaleRatioOfProjection;
 
 ////
 @property BOOL isQuerying;

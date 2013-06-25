@@ -90,7 +90,19 @@ static const int SkinRange = 22;
                 
                 cv::Mat InImage(frame);
             
-                //Ok, let's detect marker
+                // variable for skin detection 
+                IplImage* pImgCopy = cvCreateImage(cvGetSize(iplImg), iplImg->depth, iplImg->nChannels);
+                cvCopy(iplImg, pImgCopy);
+                RGBtoYCbCr(pImgCopy);
+                SkinColorDetection(pImgCopy);
+                
+                IplImage *im_gray = cvCreateImage(cvGetSize(pImgCopy),IPL_DEPTH_8U,1);
+                cvCvtColor(pImgCopy, im_gray, CV_RGB2GRAY);
+                
+                Mat mat_gray(im_gray,0);
+                Mat mat_bw  = mat_gray > 128;
+                
+                // Ok, let's detect marker
                 MDetector.detect(InImage,Markers,CamParam,MarkerSize);
                 
                 for (unsigned int i=0; i<Markers.size(); i++) {
@@ -119,29 +131,28 @@ static const int SkinRange = 22;
                     cout << "Detecte marker , marker ID: " << marker.id
                          << "at x:" << markerCenter.x << "  y:" << markerCenter.y << endl;
                     
-                    [_delegate detectMarkerId:marker.id atAbsPosition:markerCenter];
-                    
+                    CGPoint mediaFrameOrigin = [self frameLeftBottomPointOfMarker:marker];
+                    [_delegate detectMarkerId:marker.id atAbsPosition:mediaFrameOrigin];
                     
                     // skin detection
-                    IplImage* pImgCopy = cvCreateImage(cvGetSize(iplImg), iplImg->depth, iplImg->nChannels);
-                    cvCopy(iplImg, pImgCopy);
-                    RGBtoYCbCr(pImgCopy);
-                    SkinColorDetection(pImgCopy);
-                    
-                    IplImage *im_gray = cvCreateImage(cvGetSize(pImgCopy),IPL_DEPTH_8U,1);
-                    cvCvtColor(pImgCopy, im_gray, CV_RGB2GRAY);
-                    
-                    Mat mat_gray(im_gray,0);
-                    Mat mat_bw  = mat_gray > 128;
-
                     NSRect nsRect = [_delegate getFrameOfMarker:@(marker.id)];
                     if (nsRect.origin.x == -1000) continue;
+                    
                     cv::Rect cvRect = nsRectToCVRect(nsRect);
                     
-                    cv::Rect roiRect = cv::Rect((DefaultMediaFrameSize.width/2 - 20), (DefaultMediaFrameSize.height/2 + 20), 40, 40);
-                    Mat roiImg = mat_bw(roiRect);
+                    float ratio= [_delegate scaleRatioOfProjection];
+                    cv::Rect roiRect = cv::Rect(mediaFrameOrigin.x + 
+                                                (DefaultMediaFrameSize.width/2 - DefaultMediaFrameSize.width/10),
+                                                cameraResolutionHeight - 
+                                                (mediaFrameOrigin.y + (DefaultMediaFrameSize.height/2 + DefaultMediaFrameSize.height/10)),
+                                                DefaultMediaFrameSize.width/4,
+                                                DefaultMediaFrameSize.height/4);
+                    cv::Mat roiImg = mat_bw(roiRect);
                     
-                    cvRectangleR(pImgCopy, cvRect, Scalar(0,0,250));
+                    cv::Rect redRect = cv::Rect(markerCenter.x + (DefaultMediaFrameSize.width/2 - DefaultMediaFrameSize.width/10),
+                                                markerCenter.y + (DefaultMediaFrameSize.height/2 + DefaultMediaFrameSize.height/10),
+                                                40, 40);
+                    cvRectangleR(pImgCopy, roiRect, Scalar(0,0,250));
                     
                     double count = 0;
                     MatIterator_<uchar> it, end;
@@ -150,16 +161,16 @@ static const int SkinRange = 22;
                             count++;
                         }
                         
-                        if (count > 0.1*roiImg.rows*roiImg.cols) {
+                        if (count > 0.5*roiImg.rows*roiImg.cols) {
                             [_delegate markerIsPressed:@(marker.id)];
                             break;
                         }
                     }
-                    cvShowImage("Skin", pImgCopy);
+                
                 }
-
+            
                 cv::imshow("Capture",InImage);
-
+                cvShowImage("Skin", pImgCopy);
             }
             
             waitKey(0);
@@ -192,12 +203,18 @@ static const int SkinRange = 22;
 {
     float x = marker[0].x + marker[1].x + marker[2].x + marker[3].x;
     float y = marker[0].y + marker[1].y + marker[2].y + marker[3].y;
-    for (int i=0; i<4; ++i) {
-        cout << marker[i].y  << endl;
-    }
-    cout << y << endl;
-    cout << ProjectorResolutionHeight - y/4 << endl;
+
     return CGPointMake(x/4, cameraResolutionHeight - y/4);
+}
+
+- (CGPoint)frameLeftBottomPointOfMarker:(aruco::Marker)marker
+{
+    float x = (marker[0].x + marker[1].x + marker[2].x + marker[3].x) / 4;
+    float y = cameraResolutionHeight - ((marker[0].y + marker[1].y + marker[2].y + marker[3].y) / 4);
+    float offset_x = (ABS(marker[0].x - marker[2].x) + ABS(marker[1].x - marker[3].x)) / 4;
+    float offset_y = (ABS(marker[0].y - marker[2].y) + ABS(marker[1].y - marker[3].y)) / 4;
+    
+    return CGPointMake(x + offset_x, y + offset_y);
 }
 
 cv::Rect nsRectToCVRect(NSRect nsRect)
