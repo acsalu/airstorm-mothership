@@ -18,6 +18,8 @@
 
 - (void)detectMarkerId:(int)markerId atAbsPosition:(CGPoint)absPosition;
 - (void)markerIsPressed:(NSNumber *)markerId;
+
+- (BOOL)markerIsVideo:(NSNumber *)markerId;
 // QQ
 - (NSRect)getFrameOfMarker:(NSNumber *)markerId;
 - (float)scaleRatioOfProjection;
