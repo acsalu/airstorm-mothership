@@ -116,8 +116,40 @@ NSSize DefaultMediaFrameSize = {320, 240};
 - (void)playVideoForWebView:(WebView *)webView withVideoId:(NSString *)videoId
 {
     NSString *ytHTML = [NSString stringWithFormat:@"\
-                        <iframe width='%f' height='%f' frameborder='0' \
-                        src='http://www.youtube.com/embed/%@'></iframe>", webView.frame.size.width, webView.frame.size.height, videoId];
+                        <!DOCTYPE html>\
+                        <html>\
+                        <body>\
+                        <div id='player'></div>\
+                        <script>\
+                        var tag = document.createElement('script');\
+                        tag.src = 'https://www.youtube.com/iframe_api';\
+                        var firstScriptTag = document.getElementsByTagName('script')[0];\
+                        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);\
+                        var player;\
+                        function onYouTubeIframeAPIReady() {\
+                            player = new YT.Player('player', {\
+                            height: '%f',\
+                            width: '%f',\
+                            videoId: '%@',\
+                            events: {\
+                                'onReady': onPlayerReady,\
+                                'onStateChange': onPlayerStateChange\
+                            }\
+                            });\
+                        }\
+                        function onPlayerReady(event) {\
+                            event.target.playVideo();\
+                        }\
+                        var done = false;\
+                        function onPlayerStateChange(event) {\
+                            if (event.data == YT.PlayerState.PLAYING && !done) {\
+                                setTimeout(stopVideo, 6000);\
+                                done = true;\
+                            }\
+                        }\
+                        </script>\
+                        </body>\
+                        </html>", webView.frame.size.height, webView.frame.size.width, videoId];
 
     [webView.mainFrame loadHTMLString:ytHTML baseURL:nil];
 }
