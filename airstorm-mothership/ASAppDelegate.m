@@ -25,6 +25,7 @@ NSSize DefaultMediaFrameSize = {320, 240};
     
     [_window setBackgroundColor:[NSColor blackColor]];
     _mediaFrames = [NSMutableDictionary dictionary];
+    _playStatus = [NSMutableDictionary dictionary];
     
     _locationManager = [[CLLocationManager alloc] init];
     _locationManager.desiredAccuracy = kCLLocationAccuracyBest;
@@ -98,6 +99,7 @@ NSSize DefaultMediaFrameSize = {320, 240};
     WebView *mediaView = [[WebView alloc] initWithFrame:frame];
     [self.window.contentView addSubview:mediaView];
     [_mediaFrames setObject:mediaView forKey:@(markerId)];
+    [_playStatus setObject:@(PAUSE) forKey:@(markerId)];
     
     NSLog(@"mediaId: %d", markerId);
     NSString *type = data[@"type"];
@@ -120,6 +122,7 @@ NSSize DefaultMediaFrameSize = {320, 240};
                         src='http://www.youtube.com/embed/%@'></iframe>", webView.frame.size.width, webView.frame.size.height, videoId];
 
     [webView.mainFrame loadHTMLString:ytHTML baseURL:nil];
+    [self performSelector:@selector(markerIsPressed:) withObject:nil afterDelay:3];
 }
 
 - (void)playImageForWebView:(WebView *)webView withImageURL:(NSString *)imageURL;
@@ -136,6 +139,7 @@ NSSize DefaultMediaFrameSize = {320, 240};
     WebView *mediaView = [_mediaFrames objectForKey:markerId];
     [mediaView removeFromSuperview];
     [_mediaFrames removeObjectForKey:markerId];
+    [_playStatus removeObjectForKey:markerId];
 }
 
 #pragma mark - CLLocationManagerDelegate methods
@@ -182,6 +186,18 @@ NSSize DefaultMediaFrameSize = {320, 240};
 - (void)markerIsPressed:(NSNumber *)markerId
 {
     NSLog(@"sooooooooong laaaaaa%@", markerId);
+    WebView *mediaView = [_mediaFrames objectForKey:markerId];
+    
+    NSString *script;
+    if ([[_playStatus objectForKey:markerId] isEqual:@(PLAY)]) {
+        script = @"player.pauseVideo();";
+    }
+    else{
+        script = @"player.playVideo();";
+    }
+    
+    [mediaView stringByEvaluatingJavaScriptFromString:script];
+    
 }
 
 - (void)setCornerLeftTop:(CGPoint)point

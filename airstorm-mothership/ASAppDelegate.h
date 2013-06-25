@@ -15,6 +15,9 @@ extern const int ProjectorResolutionWidth;
 extern const int ProjectorResolutionHeight;
 extern NSSize DefaultMediaFrameSize;
 
+#define PLAY 1
+#define PAUSE 2
+
 @class PFGeoPoint;
 
 @interface ASAppDelegate : NSObject <NSApplicationDelegate, CLLocationManagerDelegate, NSWindowDelegate, ASDetectorDelegate>
@@ -42,6 +45,8 @@ extern NSSize DefaultMediaFrameSize;
 @property BOOL isQuerying;
 @property CGPoint corner_lt, corner_rt, corner_rb, corner_lb;
 @property (strong, nonatomic) NSMutableDictionary *mediaFrames;
+@property (nonatomic) NSMutableDictionary *playStatus;
+
 - (CGPoint)positionRelativeToProjection:(CGPoint)absPosiotn;
 
 - (NSRect)getFrameOfMarker:(NSNumber *)markerId;
