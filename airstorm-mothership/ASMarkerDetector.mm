@@ -155,7 +155,7 @@ static const int SkinRange = 22;
 //                    cv::Rect redRect = cv::Rect(markerCenter.x + (DefaultMediaFrameSize.width/2 - DefaultMediaFrameSize.width/10),
 //                                                markerCenter.y + (DefaultMediaFrameSize.height/2 + DefaultMediaFrameSize.height/10),
 //                                                40, 40);
-                    cvRectangleR(iplImg, roiRect, Scalar(0,0,250));
+                    cvRectangleR(iplImg, roiRect, Scalar(0,250,0),5);
                     
                     int count, count_rev, thresholdNumOfPixel;
                     count = count_rev = 0;

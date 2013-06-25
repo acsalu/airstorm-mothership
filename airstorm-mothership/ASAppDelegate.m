@@ -15,6 +15,8 @@ const int ProjectorResolutionWidth = 1024;
 const int ProjectorResolutionHeight = 768;
 NSSize DefaultMediaFrameSize = {320, 180};
 
+#define THRESHOLD_DISTANCE 1.0
+#define THRESHOLD_TIME_INTERVAL 10800
 
 @implementation ASAppDelegate
 
@@ -22,6 +24,8 @@ NSSize DefaultMediaFrameSize = {320, 180};
 {
     [Parse setApplicationId:@"n7N5WY2FgddzT9GagvvgEgNFYR4u2iRjP4CkCKK3"
                   clientKey:@"YzqN7TkJitqR9N2bCyfiaHyeJ4hM8ovEOoE69le7"];
+    
+    _isQuerying = _isPressing = NO;
     
     [_window setBackgroundColor:[NSColor blackColor]];
     _mediaFrames = [NSMutableDictionary dictionary];
@@ -56,8 +60,19 @@ NSSize DefaultMediaFrameSize = {320, 180};
     if (mediaView == nil && self.isQuerying == NO) {
         self.isQuerying = YES;
         
+        
         PFQuery *query = [PFQuery queryWithClassName:@"PlayBack"];
+        PFGeoPoint *geoPoint = [PFGeoPoint geoPointWithLocation:_currentLocation];
+        // TODO: add more constraints (e.g. location)
         [query whereKey:@"markerId" equalTo:@(markerId)];
+        [query whereKey:@"location" nearGeoPoint:geoPoint withinKilometers:THRESHOLD_DISTANCE];
+        NSDate *thresholdDate = [NSDate dateWithTimeInterval:-THRESHOLD_TIME_INTERVAL sinceDate:[NSDate date]];
+        
+        [query whereKey:@"createdAt" greaterThan:thresholdDate];
+        [query orderByDescending:@"createdAt"];
+        
+        
+        
         [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
             if (!error) {
                 if (objects.count == 0) {
@@ -108,7 +123,7 @@ NSSize DefaultMediaFrameSize = {320, 180};
     
     if ([type isEqualToString:@"video"]){
         [self playVideoForWebView:mediaView withVideoId:data[@"videoId"]];
-        [self performSelector:@selector(markerIsPressed:) withObject:@(markerId) afterDelay:5];
+//        [self performSelector:@selector(markerIsPressed:) withObject:@(markerId) afterDelay:5];
     }
     
     else if ([type isEqualToString:@"image"])
@@ -214,13 +229,21 @@ NSSize DefaultMediaFrameSize = {320, 180};
 
 - (void)markerIsPressed:(NSNumber *)markerId
 {
+    if (_isPressing) return;
+    _isPressing = YES;
+    
     WebView *mediaView = [_mediaFrames objectForKey:markerId];
     
     if ([[_playStatus objectForKey:markerId] isEqual:@(PAUSE)] ) {
-       [mediaView stringByEvaluatingJavaScriptFromString:@"callPlayer('player','playVideo');"];
+        [mediaView stringByEvaluatingJavaScriptFromString:@"callPlayer('player','playVideo');"];
+        [_playStatus setObject:@(PLAY) forKey:markerId];
+
+        [self performSelector:@selector(setIsPressing:) withObject:NO afterDelay:1];
     }
     else {
         [mediaView stringByEvaluatingJavaScriptFromString:@"callPlayer('player','pauseVideo');"];
+        [_playStatus setObject:@(PAUSE) forKey:markerId];
+        [self performSelector:@selector(setIsPressing:) withObject:NO afterDelay:1];
     }
     
 }

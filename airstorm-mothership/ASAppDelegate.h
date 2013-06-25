@@ -44,6 +44,7 @@ extern NSSize DefaultMediaFrameSize;
 - (BOOL)markerIsVideo:(NSNumber *)markerId;
 ////
 @property BOOL isQuerying;
+@property BOOL isPressing;
 @property CGPoint corner_lt, corner_rt, corner_rb, corner_lb;
 @property (strong, nonatomic) NSMutableDictionary *mediaFrames;
 @property (strong, nonatomic) NSMutableDictionary *mediaTypes;
