@@ -11,7 +11,7 @@
 #import "ASMarkerDetector.h"
 #import <ParseOSX/Parse.h>
 
-const int ProjectorResolutionWidth = 1680;
+const int ProjectorResolutionWidth = 1400;
 const int ProjectorResolutionHeight = 1050;
 NSSize DefaultMediaFrameSize = {320, 240};
 
@@ -25,6 +25,7 @@ NSSize DefaultMediaFrameSize = {320, 240};
     
     [_window setBackgroundColor:[NSColor blackColor]];
     _mediaFrames = [NSMutableDictionary dictionary];
+    _mediaTypes = [NSMutableDictionary dictionary];
     _playStatus = [NSMutableDictionary dictionary];
     
     _locationManager = [[CLLocationManager alloc] init];
@@ -96,13 +97,15 @@ NSSize DefaultMediaFrameSize = {320, 240};
 
 - (void)createDisplayForMarker:(int)markerId WithData:(id)data andFrame:(CGRect)frame
 {
+    NSLog(@"mediaId: %d", markerId);
+    NSString *type = data[@"type"];
+    
     WebView *mediaView = [[WebView alloc] initWithFrame:frame];
     [self.window.contentView addSubview:mediaView];
     [_mediaFrames setObject:mediaView forKey:@(markerId)];
+    [_mediaTypes setObject:@(markerId) forKey:type];
     [_playStatus setObject:@(PAUSE) forKey:@(markerId)];
     
-    NSLog(@"mediaId: %d", markerId);
-    NSString *type = data[@"type"];
     if ([type isEqualToString:@"video"])
         [self playVideoForWebView:mediaView withVideoId:data[@"videoId"]];
     else if ([type isEqualToString:@"image"])
@@ -120,7 +123,7 @@ NSSize DefaultMediaFrameSize = {320, 240};
     NSString *ytHTML = [NSString stringWithFormat:@"\
                         <iframe width='%f' height='%f' frameborder='0' \
                         src='http://www.youtube.com/embed/%@'></iframe>", webView.frame.size.width, webView.frame.size.height, videoId];
-
+    NSLog(@"%@", webView);
     [webView.mainFrame loadHTMLString:ytHTML baseURL:nil];
     [self performSelector:@selector(markerIsPressed:) withObject:@(99) afterDelay:10];
 }
@@ -218,6 +221,13 @@ NSSize DefaultMediaFrameSize = {320, 240};
 //    
 //    [mediaView stringByEvaluatingJavaScriptFromString:script];
     
+
+
+}
+
+- (BOOL)markerIsVideo:(NSNumber *)markerId
+{
+    return [((NSString *)[_mediaTypes objectForKey:markerId]) isEqualToString:@"video"]? YES:NO;
 }
 
 - (void)setCornerLeftTop:(CGPoint)point
