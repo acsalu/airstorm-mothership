@@ -8,6 +8,7 @@
 
 #import "ASMarkerDetector.h"
 #import "ASAppDelegate.h"
+#import "ASCVUtility.h"
 #include <iostream>
 #include <opencv2/opencv.hpp>
 #include "aruco.h"
@@ -22,9 +23,23 @@ using namespace aruco;
 static int cameraResolutionWidth = 0;
 static int cameraResolutionHeight = 0;
 
+static const int avg_cb = 120;
+static const int avg_cr = 155;
+static const int SkinRange = 22;
+
 @implementation ASMarkerDetector
 
-+ (void)detect
++ (ASMarkerDetector *)sharedDetector
+{
+    static ASMarkerDetector *sharedDetector;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        sharedDetector = [[self alloc] init];
+    });
+    return sharedDetector;
+}
+
+- (void)detect
 {
     try
     {
@@ -38,7 +53,7 @@ static int cameraResolutionHeight = 0;
         } catch (cv::Exception) {
             NSAlert *alert = [NSAlert alertWithMessageText:@"Calibration file not found" defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@"Please calibrate first."];
             [alert beginSheetModalForWindow:nil modalDelegate:nil didEndSelector:nil contextInfo:nil];
-            return;
+            [ASCVUtility calibrate];
         }
         
         CvCapture* capture = 0;
@@ -46,14 +61,19 @@ static int cameraResolutionHeight = 0;
         
         capture = cvCaptureFromCAM( 0 ); //0=default, -1=any camera, 1..99=your camera
         if(!capture) cout << "No camera detected" << endl;
-        
-        cvNamedWindow( "Marker Detector", 1 );
+
+        cvNamedWindow( "Capture", 1 );
+        cvNamedWindow( "Skin", 1);
+
+        cameraResolutionWidth = cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_WIDTH);
+        cameraResolutionHeight = cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_HEIGHT);
+        DefaultMediaFrameSize.width = cameraResolutionWidth / 6;
+        DefaultMediaFrameSize.height = cameraResolutionHeight / 6;
         
         if( capture )
         {
-            ASAppDelegate* appDelegate = ((ASAppDelegate *)[NSApp delegate]);
-            
             cout << "In capture ..." << endl;
+            
             for(;;)
             {
                 IplImage* iplImg = cvQueryFrame( capture );
@@ -69,55 +89,83 @@ static int cameraResolutionHeight = 0;
                     cvReleaseCapture( &capture );
                 
                 cv::Mat InImage(frame);
-                
-                cameraResolutionWidth = InImage.cols;
-                cameraResolutionHeight = InImage.rows;
-                
-                //Ok, let's detect
+            
+                //Ok, let's detect marker
                 MDetector.detect(InImage,Markers,CamParam,MarkerSize);
-                //for each marker, draw info and its boundaries in the image
-//                cout<<"size:"<<Markers.size()<<endl;
                 
-                for (unsigned int i=0;i<Markers.size();i++) {
+                for (unsigned int i=0; i<Markers.size(); i++) {
                     aruco::Marker marker = Markers[i];
-                    marker.draw(InImage,Scalar(0,0,255),2);
+                    //for each marker, draw info and its boundaries in the image
+                    marker.draw(InImage, Scalar(0, 0, 255), 2);
+                    //draw a 3d cube in each marker if there is 3d info
+                    CvDrawingUtils::draw3dCube(InImage, marker, CamParam);
+                    
+                    CGPoint markerCenter = [self centerOfMarkerInCGPoint:marker];
                     
                     if (marker.id == 0) {
-                        cv::Point2f p = centerOfMarker(marker);
-                        appDelegate.corner_lt = CGPointMake(p.x, p.y);
+                        [_delegate setCornerLeftTop:markerCenter];
                         continue;
                     } else if (marker.id == 1) {
-                        cv::Point2f p = centerOfMarker(marker);
-                        appDelegate.corner_rt = CGPointMake(p.x, p.y);
+                        [_delegate setCornerRightTop:markerCenter];
                         continue;
                     } else if (marker.id == 2) {
-                        cv::Point2f p = centerOfMarker(marker);
-                        appDelegate.corner_rb = CGPointMake(p.x, p.y);
+                        [_delegate setCornerRightBottom:markerCenter];
                         continue;
                     } else if (marker.id == 3) {
-                        cv::Point2f p = centerOfMarker(marker);
-                        appDelegate.corner_lb = CGPointMake(p.x, p.y);
+                        [_delegate setCornerLeftBottom:markerCenter];
                         continue;
                     }
                     
-                    cout << "Detecte marker , marker ID: " << marker.id << endl;
+                    cout << "Detecte marker , marker ID: " << marker.id
+                         << "at x:" << markerCenter.x << "  y:" << markerCenter.y << endl;
                     
-                    cv::Point2f p = centerOfMarker(marker);
+                    [_delegate detectMarkerId:marker.id atAbsPosition:markerCenter];
                     
-                    [appDelegate detectMarkerId:marker.id atAbsPosition:CGPointMake(p.x, p.y)];
-                }
-                //                //draw a 3d cube in each marker if there is 3d info
-                if (  CamParam.isValid() && MarkerSize!=-1) {
-                    for (unsigned int i=0;i<Markers.size();i++) {
-                        CvDrawingUtils::draw3dCube(InImage,Markers[i],CamParam);
+                    
+                    // skin detection
+                    IplImage* pImgCopy = cvCreateImage(cvGetSize(iplImg), iplImg->depth, iplImg->nChannels);
+                    cvCopy(iplImg, pImgCopy);
+                    RGBtoYCbCr(pImgCopy);
+                    SkinColorDetection(pImgCopy);
+                    
+                    IplImage *im_gray = cvCreateImage(cvGetSize(pImgCopy),IPL_DEPTH_8U,1);
+                    cvCvtColor(pImgCopy, im_gray, CV_RGB2GRAY);
+                    
+                    Mat mat_gray(im_gray,0);
+                    Mat mat_bw  = mat_gray > 128;
+
+                    NSRect nsRect = [_delegate getFrameOfMarker:@(marker.id)];
+                    if (nsRect.origin.x == -1000) continue;
+                    cv::Rect cvRect = nsRectToCVRect(nsRect);
+                    
+                    cv::Rect roiRect = cv::Rect((DefaultMediaFrameSize.width/2 - 20), (DefaultMediaFrameSize.height/2 + 20), 40, 40);
+                    Mat roiImg = mat_bw(roiRect);
+                    
+                    cvRectangleR(pImgCopy, cvRect, Scalar(0,0,250));
+                    
+                    double count = 0;
+                    MatIterator_<uchar> it, end;
+                    for( it = roiImg.begin<uchar>(), end = roiImg.end<uchar>(); it != end; ++it) {
+                        if(*(it) > 0){
+                            count++;
+                        }
+                        
+                        if (count > 0.1*roiImg.rows*roiImg.cols) {
+                            [_delegate markerIsPressed:@(marker.id)];
+                            break;
+                        }
                     }
+                    cvShowImage("Skin", pImgCopy);
                 }
-                cv::imshow("Marker Detector",InImage);
+
+                cv::imshow("Capture",InImage);
+
             }
             
             waitKey(0);
             
-            cvDestroyWindow("Marker Detector");
+            cvDestroyWindow("Capture");
+            cvDestroyWindow("Skin");
             
         }
         
@@ -140,12 +188,62 @@ static int cameraResolutionHeight = 0;
     return cameraResolutionHeight;
 }
 
-cv::Point2f centerOfMarker(aruco::Marker marker)
+- (CGPoint)centerOfMarkerInCGPoint:(aruco::Marker)marker
 {
     float x = marker[0].x + marker[1].x + marker[2].x + marker[3].x;
     float y = marker[0].y + marker[1].y + marker[2].y + marker[3].y;
-    return cv::Point2f(x/4, y/4);
+    for (int i=0; i<4; ++i) {
+        cout << marker[i].y  << endl;
+    }
+    cout << y << endl;
+    cout << ProjectorResolutionHeight - y/4 << endl;
+    return CGPointMake(x/4, cameraResolutionHeight - y/4);
+}
+
+cv::Rect nsRectToCVRect(NSRect nsRect)
+{
+    return cv::Rect(nsRect.origin.x, cameraResolutionHeight - nsRect.origin.y, nsRect.size.width, nsRect.size.height);
+}
+
+void RGBtoYCbCr(IplImage *image)
+{
+    CvScalar scalarImg;
+    double cb, cr, y;
+    for(int i=0; i<image->height; i++)
+        for(int j=0; j<image->width; j++)
+        {
+            scalarImg = cvGet2D(image, i, j); // get RGB value from image
+            y =  (16 + scalarImg.val[2]*0.257 + scalarImg.val[1]*0.504
+                  + scalarImg.val[0]*0.098);
+            cb = (128 - scalarImg.val[2]*0.148 - scalarImg.val[1]*0.291
+                  + scalarImg.val[0]*0.439);
+            cr = (128 + scalarImg.val[2]*0.439 - scalarImg.val[1]*0.368
+                  - scalarImg.val[0]*0.071);
+            // change color space from RGB to YCbCr
+            cvSet2D(image, i, j, cvScalar( y, cr, cb));
+        }
 }
 
 
+void SkinColorDetection(IplImage *image)
+{
+    CvScalar scalarImg;
+    double cb, cr;
+    for(int i=0; i<image->height; i++)
+        for(int j=0; j<image->width; j++)
+        {
+            scalarImg = cvGet2D(image, i, j);
+            cr = scalarImg.val[1];
+            cb = scalarImg.val[2];
+            if((cb > avg_cb-SkinRange && cb < avg_cb+SkinRange) &&
+               (cr > avg_cr-SkinRange && cr < avg_cr+SkinRange))
+                cvSet2D(image, i, j, cvScalar( 255, 255, 255));
+            else
+                cvSet2D(image, i, j, cvScalar( 0, 0, 0));
+        }
+}
+
+
+
 @end
+

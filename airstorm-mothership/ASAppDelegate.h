@@ -9,26 +9,25 @@
 #import <Cocoa/Cocoa.h>
 #import <WebKit/WebKit.h>
 #import <CoreLocation/CoreLocation.h>
+#import "ASMarkerDetector.h"
 
 extern const int ProjectorResolutionWidth;
 extern const int ProjectorResolutionHeight;
-extern const CGSize DefaultMediaFrameSize;
+extern NSSize DefaultMediaFrameSize;
 
 @class PFGeoPoint;
 
-@interface ASAppDelegate : NSObject <NSApplicationDelegate, CLLocationManagerDelegate, NSWindowDelegate>
+@interface ASAppDelegate : NSObject <NSApplicationDelegate, CLLocationManagerDelegate, NSWindowDelegate, ASDetectorDelegate>
 
 @property (assign) IBOutlet NSWindow *window;
-@property (weak) IBOutlet NSTextField *markerId;
-//@property (weak) IBOutlet WebView *webView;
-
 
 @property (strong) CLLocationManager *locationManager;
 @property (strong) CLLocation *currentLocation;
 
-- (IBAction)runButtonPressed:(id)sender;
-- (IBAction)calibrateButtonPressed:(id)sender;
-- (IBAction)detectButtonPressed:(id)sender;
+@property (weak) IBOutlet NSImageView *anchorView0;
+@property (weak) IBOutlet NSImageView *anchorView1;
+@property (weak) IBOutlet NSImageView *anchorView2;
+@property (weak) IBOutlet NSImageView *anchorView3;
 
 
 - (void)detectMarkerId:(int)markerId atAbsPosition:(CGPoint)absPosition;
@@ -41,9 +40,15 @@ extern const CGSize DefaultMediaFrameSize;
 ////
 @property BOOL isQuerying;
 @property CGPoint corner_lt, corner_rt, corner_rb, corner_lb;
-//@property (strong, nonatomic) NSMutableArray *markers;
 @property (strong, nonatomic) NSMutableDictionary *mediaFrames;
 - (CGPoint)positionRelativeToProjection:(CGPoint)absPosiotn;
+
+- (NSRect)getFrameOfMarker:(NSNumber *)markerId;
+
+- (void)setCornerLeftTop:(CGPoint)point;
+- (void)setCornerRightTop:(CGPoint)point;
+- (void)setCornerRightBottom:(CGPoint)point;
+- (void)setCornerLeftBottom:(CGPoint)point;
 
 
 @end

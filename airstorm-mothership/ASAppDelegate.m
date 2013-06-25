@@ -11,9 +11,9 @@
 #import "ASMarkerDetector.h"
 #import <ParseOSX/Parse.h>
 
-const int ProjectorResolutionWidth = 800;
-const int ProjectorResolutionHeight = 600;
-const NSSize DefaultMediaFrameSize = {320, 240};
+const int ProjectorResolutionWidth = 1680;
+const int ProjectorResolutionHeight = 1050;
+NSSize DefaultMediaFrameSize = {320, 240};
 
 
 @implementation ASAppDelegate
@@ -36,28 +36,15 @@ const NSSize DefaultMediaFrameSize = {320, 240};
     self.corner_rb = CGPointMake(800, 0);
     self.corner_lb = CGPointMake(0, 0);
     
-//    _webView.autoresizesSubviews = YES;
-//    _webView.autoresizingMask = YES;
+    [ASMarkerDetector sharedDetector].delegate = self;
     
+    self.anchorView0.image = [NSImage imageNamed:@"anchor0.png"];
+    self.anchorView1.image = [NSImage imageNamed:@"anchor1.png"];
+    self.anchorView2.image = [NSImage imageNamed:@"anchor2.png"];
+    self.anchorView3.image = [NSImage imageNamed:@"anchor3.png"];
+    
+    [[ASMarkerDetector sharedDetector] detect];
 }
-
-#pragma mark - Testing IBActions
-
-- (IBAction)runButtonPressed:(id)sender
-{
-    [self detectMarkerId:_markerId.intValue atAbsPosition:CGPointMake(0, 0)];
-}
-
-- (IBAction)calibrateButtonPressed:(id)sender
-{
-    [ASCVUtility calibrate];
-}
-
-- (IBAction)detectButtonPressed:(id)sender
-{
-    [ASMarkerDetector detect];
-}
-
 
 #pragma mark - Marker Detection methods
 
@@ -173,8 +160,8 @@ const NSSize DefaultMediaFrameSize = {320, 240};
     float projectionImageWidth = _corner_rt.x - _corner_lb.x;
     float projectionImageHeight = _corner_rt.y - _corner_lb.y;
     
-    float x = (absPosiotn.x - self.corner_lb.x) * projectionImageWidth/ProjectorResolutionWidth;
-    float y = (([ASMarkerDetector cameraResolutionHeight] - absPosiotn.y) - self.corner_lb.y) * projectionImageHeight/ProjectorResolutionHeight;
+    float x = (absPosiotn.x - self.corner_lb.x) * ProjectorResolutionWidth/projectionImageWidth;
+    float y = (absPosiotn.y - self.corner_lb.y) * ProjectorResolutionHeight/projectionImageHeight;
     
     return CGPointMake(x, y);
 }
@@ -182,7 +169,39 @@ const NSSize DefaultMediaFrameSize = {320, 240};
 // according to width
 - (float)scaleRatioOfProjection
 {
-    return (_corner_rt.x - _corner_lb.x) / ProjectorResolutionWidth;
+    return ProjectorResolutionWidth / (_corner_rt.x - _corner_lb.x);
+}
+
+
+- (NSRect)getFrameOfMarker:(NSNumber *)markerId
+{
+    WebView *mediaView = [_mediaFrames objectForKey:markerId];
+    return mediaView? mediaView.frame: NSMakeRect(-1000, -1000, 0, 0);
+}
+
+- (void)markerIsPressed:(NSNumber *)markerId
+{
+    NSLog(@"sooooooooong laaaaaa%@", markerId);
+}
+
+- (void)setCornerLeftTop:(CGPoint)point
+{
+    _corner_lt = point;
+}
+
+- (void)setCornerRightTop:(CGPoint)point;
+{
+    _corner_rt = point;
+}
+
+- (void)setCornerRightBottom:(CGPoint)point;
+{
+    _corner_rb = point;
+}
+
+- (void)setCornerLeftBottom:(CGPoint)point;
+{
+    _corner_lb = point;
 }
 
 @end

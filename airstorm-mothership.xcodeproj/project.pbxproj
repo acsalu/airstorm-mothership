@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		0F3F7DD51775EF0000FC6FBF /* ASMarkerDetector.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0F3F7DD41775EEFF00FC6FBF /* ASMarkerDetector.mm */; };
+		0F7916FB1779A11B00B2B803 /* anchor0.png in Resources */ = {isa = PBXBuildFile; fileRef = 0F7916F71779A11B00B2B803 /* anchor0.png */; };
+		0F7916FC1779A11B00B2B803 /* anchor1.png in Resources */ = {isa = PBXBuildFile; fileRef = 0F7916F81779A11B00B2B803 /* anchor1.png */; };
+		0F7916FD1779A11B00B2B803 /* anchor2.png in Resources */ = {isa = PBXBuildFile; fileRef = 0F7916F91779A11B00B2B803 /* anchor2.png */; };
+		0F7916FE1779A11B00B2B803 /* anchor3.png in Resources */ = {isa = PBXBuildFile; fileRef = 0F7916FA1779A11B00B2B803 /* anchor3.png */; };
 		0FE201CD1775E8F4004A8914 /* libopencv_calib3d.2.4.5.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 0FE201C81775E8F4004A8914 /* libopencv_calib3d.2.4.5.dylib */; };
 		0FE201CE1775E8F4004A8914 /* libopencv_core.2.4.5.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 0FE201C91775E8F4004A8914 /* libopencv_core.2.4.5.dylib */; };
 		0FE201CF1775E8F4004A8914 /* libopencv_features2d.2.4.5.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 0FE201CA1775E8F4004A8914 /* libopencv_features2d.2.4.5.dylib */; };
@@ -52,6 +56,10 @@
 /* Begin PBXFileReference section */
 		0F3F7DD31775EEFF00FC6FBF /* ASMarkerDetector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASMarkerDetector.h; sourceTree = "<group>"; };
 		0F3F7DD41775EEFF00FC6FBF /* ASMarkerDetector.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ASMarkerDetector.mm; sourceTree = "<group>"; };
+		0F7916F71779A11B00B2B803 /* anchor0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = anchor0.png; sourceTree = "<group>"; };
+		0F7916F81779A11B00B2B803 /* anchor1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = anchor1.png; sourceTree = "<group>"; };
+		0F7916F91779A11B00B2B803 /* anchor2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = anchor2.png; sourceTree = "<group>"; };
+		0F7916FA1779A11B00B2B803 /* anchor3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = anchor3.png; sourceTree = "<group>"; };
 		0FE201C81775E8F4004A8914 /* libopencv_calib3d.2.4.5.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_calib3d.2.4.5.dylib; path = /usr/local/Cellar/opencv/2.4.5/lib/libopencv_calib3d.2.4.5.dylib; sourceTree = "<absolute>"; };
 		0FE201C91775E8F4004A8914 /* libopencv_core.2.4.5.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_core.2.4.5.dylib; path = /usr/local/Cellar/opencv/2.4.5/lib/libopencv_core.2.4.5.dylib; sourceTree = "<absolute>"; };
 		0FE201CA1775E8F4004A8914 /* libopencv_features2d.2.4.5.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_features2d.2.4.5.dylib; path = /usr/local/Cellar/opencv/2.4.5/lib/libopencv_features2d.2.4.5.dylib; sourceTree = "<absolute>"; };
@@ -117,6 +125,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0F7916E217799C7300B2B803 /* Marker */ = {
+			isa = PBXGroup;
+			children = (
+				0F7916F71779A11B00B2B803 /* anchor0.png */,
+				0F7916F81779A11B00B2B803 /* anchor1.png */,
+				0F7916F91779A11B00B2B803 /* anchor2.png */,
+				0F7916FA1779A11B00B2B803 /* anchor3.png */,
+			);
+			name = Marker;
+			sourceTree = "<group>";
+		};
 		0FE201D21775E90B004A8914 /* OpenCV */ = {
 			isa = PBXGroup;
 			children = (
@@ -181,6 +200,7 @@
 				903DFEA21773FDC100F63625 /* NSImage+OpenCV.h */,
 				903DFEA31773FDC100F63625 /* NSImage+OpenCV.mm */,
 				9065B6651773658E00C2A2E9 /* MainMenu.xib */,
+				0F7916E217799C7300B2B803 /* Marker */,
 				9065B6571773658E00C2A2E9 /* Supporting Files */,
 			);
 			path = "airstorm-mothership";
@@ -271,6 +291,10 @@
 				9065B65B1773658E00C2A2E9 /* InfoPlist.strings in Resources */,
 				9065B6611773658E00C2A2E9 /* Credits.rtf in Resources */,
 				9065B6671773658E00C2A2E9 /* MainMenu.xib in Resources */,
+				0F7916FB1779A11B00B2B803 /* anchor0.png in Resources */,
+				0F7916FC1779A11B00B2B803 /* anchor1.png in Resources */,
+				0F7916FD1779A11B00B2B803 /* anchor2.png in Resources */,
+				0F7916FE1779A11B00B2B803 /* anchor3.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
