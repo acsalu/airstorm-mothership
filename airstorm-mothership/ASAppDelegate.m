@@ -11,8 +11,8 @@
 #import "ASMarkerDetector.h"
 #import <ParseOSX/Parse.h>
 
-const int ProjectorResolutionWidth = 1400;
-const int ProjectorResolutionHeight = 1050;
+const int ProjectorResolutionWidth = 1024;
+const int ProjectorResolutionHeight = 768;
 NSSize DefaultMediaFrameSize = {320, 240};
 
 
@@ -195,7 +195,7 @@ NSSize DefaultMediaFrameSize = {320, 240};
     //CGEventRef theEvent = CGEventCreateMouseEvent(NULL, kCGEventLeftMouseDown, CGPointMake(100,100), kCGMouseButtonLeft);
 
 //    CGEventRef theEvent = CGEventCreateMouseEvent(NULL, kCGEventLeftMouseDown, CGPointMake(mediaView.frame.origin.x+mediaView.frame.size.width/2, mediaView.frame.origin.y+mediaView.frame.size.height/2), kCGMouseButtonLeft);
-    CGEventRef theEvent = CGEventCreateMouseEvent(NULL, kCGEventLeftMouseDown, CGPointMake(mediaView.frame.origin.x + 100, mediaView.frame.origin.y + 50), kCGMouseButtonLeft);
+    CGEventRef theEvent = CGEventCreateMouseEvent(NULL, kCGEventLeftMouseDown, CGPointMake(mediaView.frame.origin.x + mediaView.frame.size.width / 2 , mediaView.frame.origin.y - mediaView.frame.size.height / 2), kCGMouseButtonLeft);
     
     NSLog(@"(%f,%f)",mediaView.frame.origin.x+mediaView.frame.size.width/2,mediaView.frame.origin.y+mediaView.frame.size.height/2);
     
