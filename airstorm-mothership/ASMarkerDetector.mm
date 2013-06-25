@@ -67,8 +67,8 @@ static const int SkinRange = 22;
 
         cameraResolutionWidth = cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_WIDTH);
         cameraResolutionHeight = cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_HEIGHT);
-        DefaultMediaFrameSize.width = cameraResolutionWidth / 6;
-        DefaultMediaFrameSize.height = cameraResolutionHeight / 6;
+        DefaultMediaFrameSize.width = cameraResolutionWidth / 5;
+        DefaultMediaFrameSize.height = cameraResolutionHeight / 5;
         
         if( capture )
         {

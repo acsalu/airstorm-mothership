@@ -13,7 +13,7 @@
 
 const int ProjectorResolutionWidth = 1024;
 const int ProjectorResolutionHeight = 768;
-NSSize DefaultMediaFrameSize = {320, 240};
+NSSize DefaultMediaFrameSize = {320, 180};
 
 
 @implementation ASAppDelegate
@@ -84,7 +84,7 @@ NSSize DefaultMediaFrameSize = {320, 240};
         float ratio = [self scaleRatioOfProjection];
         mediaView.frame = NSMakeRect(p.x, p.y, DefaultMediaFrameSize.width * ratio, DefaultMediaFrameSize.height * ratio);
         
-        [self performSelector:@selector(destroyMediaFrameOfMarker:) withObject:@(markerId) afterDelay:5];
+        [self performSelector:@selector(destroyMediaFrameOfMarker:) withObject:@(markerId) afterDelay:3.5];
     }
 }
 
@@ -126,7 +126,7 @@ NSSize DefaultMediaFrameSize = {320, 240};
                         webView.frame.size.width, webView.frame.size.height, videoId];
     NSLog(@"%@", webView);
     [webView.mainFrame loadHTMLString:ytHTML baseURL:nil];
-    [self performSelector:@selector(markerIsPressed:) withObject:@(99) afterDelay:10];
+    [self performSelector:@selector(markerIsPressed:) withObject:@(99) afterDelay:5];
 }
 
 - (void)playImageForWebView:(WebView *)webView withImageURL:(NSString *)imageURL;
@@ -195,7 +195,7 @@ NSSize DefaultMediaFrameSize = {320, 240};
     //CGEventRef theEvent = CGEventCreateMouseEvent(NULL, kCGEventLeftMouseDown, CGPointMake(100,100), kCGMouseButtonLeft);
 
 //    CGEventRef theEvent = CGEventCreateMouseEvent(NULL, kCGEventLeftMouseDown, CGPointMake(mediaView.frame.origin.x+mediaView.frame.size.width/2, mediaView.frame.origin.y+mediaView.frame.size.height/2), kCGMouseButtonLeft);
-    CGEventRef theEvent = CGEventCreateMouseEvent(NULL, kCGEventLeftMouseDown, CGPointMake(mediaView.frame.origin.x + mediaView.frame.size.width / 2 , mediaView.frame.origin.y - mediaView.frame.size.height / 2), kCGMouseButtonLeft);
+    CGEventRef theEvent = CGEventCreateMouseEvent(NULL, kCGEventLeftMouseDown, CGPointMake(mediaView.frame.origin.x + mediaView.frame.size.width / 2 , [ASMarkerDetector cameraResolutionHeight] - (mediaView.frame.origin.y - mediaView.frame.size.height / 2)), kCGMouseButtonLeft);
     
     NSLog(@"(%f,%f)",mediaView.frame.origin.x+mediaView.frame.size.width/2,mediaView.frame.origin.y+mediaView.frame.size.height/2);
     
