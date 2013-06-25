@@ -99,7 +99,7 @@ static const int SkinRange = 22;
                 IplImage *im_gray = cvCreateImage(cvGetSize(pImgCopy),IPL_DEPTH_8U,1);
                 cvCvtColor(pImgCopy, im_gray, CV_RGB2GRAY);
                 
-                Mat mat_gray(im_gray,0);
+                Mat mat_gray(im_gray, 0);
                 Mat mat_bw  = mat_gray > 128;
                 
                 // Ok, let's detect marker
@@ -128,20 +128,22 @@ static const int SkinRange = 22;
                         continue;
                     }
                     
-                    cout << "Detecte marker , marker ID: " << marker.id
-                         << "at x:" << markerCenter.x << "  y:" << markerCenter.y << endl;
+//                    cout << "Detecte marker , marker ID: " << marker.id
+//                         << "at x:" << markerCenter.x << "  y:" << markerCenter.y << endl;
                     
                     CGPoint mediaFrameOrigin = [self frameLeftBottomPointOfMarker:marker];
                     [_delegate detectMarkerId:marker.id atAbsPosition:mediaFrameOrigin];
                     
                     // skin detection
+                    if (![_delegate markerIsVideo:@(marker.id)]) continue;
+                    
                     NSRect nsRect = [_delegate getFrameOfMarker:@(marker.id)];
                     if (nsRect.origin.x == -1000) continue;
                     
-                    cv::Rect cvRect = nsRectToCVRect(nsRect);
-                    
-                    float ratio= [_delegate scaleRatioOfProjection];
-                    cv::Rect roiRect = cv::Rect(mediaFrameOrigin.x + 
+//                    cv::Rect cvRect = nsRectToCVRect(nsRect);
+//                    
+//                    float ratio= [_delegate scaleRatioOfProjection];
+                    cv::Rect roiRect = cv::Rect(mediaFrameOrigin.x +
                                                 (DefaultMediaFrameSize.width/2 - DefaultMediaFrameSize.width/10),
                                                 cameraResolutionHeight - 
                                                 (mediaFrameOrigin.y + (DefaultMediaFrameSize.height/2 + DefaultMediaFrameSize.height/10)),
@@ -149,22 +151,23 @@ static const int SkinRange = 22;
                                                 DefaultMediaFrameSize.height/4);
                     cv::Mat roiImg = mat_bw(roiRect);
                     
-                    cv::Rect redRect = cv::Rect(markerCenter.x + (DefaultMediaFrameSize.width/2 - DefaultMediaFrameSize.width/10),
-                                                markerCenter.y + (DefaultMediaFrameSize.height/2 + DefaultMediaFrameSize.height/10),
-                                                40, 40);
+//                    cv::Rect redRect = cv::Rect(markerCenter.x + (DefaultMediaFrameSize.width/2 - DefaultMediaFrameSize.width/10),
+//                                                markerCenter.y + (DefaultMediaFrameSize.height/2 + DefaultMediaFrameSize.height/10),
+//                                                40, 40);
                     cvRectangleR(pImgCopy, roiRect, Scalar(0,0,250));
                     
-                    double count = 0;
+                    int count, count_rev, thresholdNumOfPixel;
+                    count = count_rev = 0;
+                    thresholdNumOfPixel = 0.5 * roiImg.rows * roiImg.cols;
                     MatIterator_<uchar> it, end;
                     for( it = roiImg.begin<uchar>(), end = roiImg.end<uchar>(); it != end; ++it) {
-                        if(*(it) > 0){
-                            count++;
-                        }
+                        if (*(it) > 0) count++;
+                        else count_rev++;
                         
-                        if (count > 0.5*roiImg.rows*roiImg.cols) {
+                        if (count > thresholdNumOfPixel) {
                             [_delegate markerIsPressed:@(marker.id)];
                             break;
-                        }
+                        } else if (count_rev >thresholdNumOfPixel) break;
                     }
                 
                 }

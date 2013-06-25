@@ -25,6 +25,7 @@ NSSize DefaultMediaFrameSize = {320, 240};
     
     [_window setBackgroundColor:[NSColor blackColor]];
     _mediaFrames = [NSMutableDictionary dictionary];
+    _mediaTypes = [NSMutableDictionary dictionary];
     _playStatus = [NSMutableDictionary dictionary];
     
     _locationManager = [[CLLocationManager alloc] init];
@@ -96,13 +97,15 @@ NSSize DefaultMediaFrameSize = {320, 240};
 
 - (void)createDisplayForMarker:(int)markerId WithData:(id)data andFrame:(CGRect)frame
 {
+    NSLog(@"mediaId: %d", markerId);
+    NSString *type = data[@"type"];
+    
     WebView *mediaView = [[WebView alloc] initWithFrame:frame];
     [self.window.contentView addSubview:mediaView];
     [_mediaFrames setObject:mediaView forKey:@(markerId)];
+    [_mediaTypes setObject:@(markerId) forKey:type];
     [_playStatus setObject:@(PAUSE) forKey:@(markerId)];
     
-    NSLog(@"mediaId: %d", markerId);
-    NSString *type = data[@"type"];
     if ([type isEqualToString:@"video"])
         [self playVideoForWebView:mediaView withVideoId:data[@"videoId"]];
     else if ([type isEqualToString:@"image"])
@@ -118,46 +121,12 @@ NSSize DefaultMediaFrameSize = {320, 240};
 - (void)playVideoForWebView:(WebView *)webView withVideoId:(NSString *)videoId
 {
     NSString *ytHTML = [NSString stringWithFormat:@"\
-                        <!DOCTYPE html>\
-                        <html>\
-                        <body>\
-                        <div id='player'></div>\
-                        <script>\
-                        var tag = document.createElement('script');\
-                        tag.src = 'https://www.youtube.com/iframe_api';\
-                        var firstScriptTag = document.getElementsByTagName('script')[0];\
-                        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);\
-                        var player;\
-                        function onYouTubeIframeAPIReady() {\
-                            player = new YT.Player('player', {\
-                            height: '%f',\
-                            width: '%f',\
-                            videoId: '%@',\
-                            events: {\
-                                'onReady': onPlayerReady,\
-                                'onStateChange': onPlayerStateChange\
-                            }\
-                            });\
-                        }\
-                        function onPlayerReady(event) {\
-                            event.target.playVideo();\
-                        }\
-                        var done = false;\
-                        function onPlayerStateChange(event) {\
-                            if (event.data == YT.PlayerState.PLAYING && !done) {\
-                                setTimeout(stopVideo, 6000);\
-                                done = true;\
-                            }\
-                        }\
-                        </script>\
-                        </body>\
-                        </html>", webView.frame.size.height, webView.frame.size.width, videoId];
-    
-    NSLog(@"%@", ytHTML);
-    
-
+                        <iframe width='%f' height='%f' frameborder='0' \
+                        src='http://www.youtube.com/embed/%@'></iframe>",
+                        webView.frame.size.width, webView.frame.size.height, videoId];
+    NSLog(@"%@", webView);
     [webView.mainFrame loadHTMLString:ytHTML baseURL:nil];
-    [self performSelector:@selector(markerIsPressed:) withObject:@(99) afterDelay:3];
+    [self performSelector:@selector(markerIsPressed:) withObject:@(99) afterDelay:5];
 }
 
 - (void)playImageForWebView:(WebView *)webView withImageURL:(NSString *)imageURL;
@@ -241,6 +210,13 @@ NSSize DefaultMediaFrameSize = {320, 240};
 //        NSLog(@"sucks");
 //    };
     
+
+
+}
+
+- (BOOL)markerIsVideo:(NSNumber *)markerId
+{
+    return [((NSString *)[_mediaTypes objectForKey:markerId]) isEqualToString:@"video"]? YES:NO;
 }
 
 - (void)setCornerLeftTop:(CGPoint)point

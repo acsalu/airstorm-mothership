@@ -40,11 +40,12 @@ extern NSSize DefaultMediaFrameSize;
 - (void)createDisplayForMarker:(int)markerId WithData:(id)data andFrame:(CGRect)frame;
 
 - (float)scaleRatioOfProjection;
-
+- (BOOL)markerIsVideo:(NSNumber *)markerId;
 ////
 @property BOOL isQuerying;
 @property CGPoint corner_lt, corner_rt, corner_rb, corner_lb;
 @property (strong, nonatomic) NSMutableDictionary *mediaFrames;
+@property (strong, nonatomic) NSMutableDictionary *mediaTypes;
 @property (nonatomic) NSMutableDictionary *playStatus;
 
 - (CGPoint)positionRelativeToProjection:(CGPoint)absPosiotn;
@@ -55,6 +56,5 @@ extern NSSize DefaultMediaFrameSize;
 - (void)setCornerRightTop:(CGPoint)point;
 - (void)setCornerRightBottom:(CGPoint)point;
 - (void)setCornerLeftBottom:(CGPoint)point;
-
 
 @end
