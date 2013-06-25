@@ -106,8 +106,11 @@ NSSize DefaultMediaFrameSize = {320, 180};
     [_mediaTypes setObject:type forKey:@(markerId)];
     [_playStatus setObject:@(PAUSE) forKey:@(markerId)];
     
-    if ([type isEqualToString:@"video"])
+    if ([type isEqualToString:@"video"]){
         [self playVideoForWebView:mediaView withVideoId:data[@"videoId"]];
+        [self performSelector:@selector(markerIsPressed:) withObject:@(markerId) afterDelay:5];
+    }
+    
     else if ([type isEqualToString:@"image"])
         [self playImageForWebView:mediaView withImageURL:data[@"imageURL"]];
     else if ([type isEqualToString:@"photo"])
@@ -121,12 +124,33 @@ NSSize DefaultMediaFrameSize = {320, 180};
 - (void)playVideoForWebView:(WebView *)webView withVideoId:(NSString *)videoId
 {
     NSString *ytHTML = [NSString stringWithFormat:@"\
-                        <iframe width='%f' height='%f' frameborder='0' \
-                        src='http://www.youtube.com/embed/%@'></iframe>",
+                        <!DOCTYPE html>\
+                        <html>\
+                        <head>\
+                        <script>\
+                        function callPlayer(frame_id, func, args) {\
+                        if (window.jQuery && frame_id instanceof jQuery) frame_id = frame_id.get(0).id;\
+                        var iframe = document.getElementById(frame_id);\
+                        if (iframe && iframe.tagName.toUpperCase() != 'IFRAME') {\
+                        iframe = iframe.getElementsByTagName('iframe')[0];\
+                        }\
+                        if (iframe) {\
+                        iframe.contentWindow.postMessage(JSON.stringify({\
+                        'event': 'command',\
+                        'func': func,\
+                        'args': args || [],\
+                        'id': frame_id\
+                        }), '*');\
+                        }\
+                        }\
+                        </script>\
+                        <body>\
+                        <div id='player'><iframe width='%f' height='%f' frameborder='0' title='YouTube video player' type='text/html' src='http://www.youtube.com/embed/%@?enablejsapi=1'></iframe></div>\
+                        </body>\
+                        </html>",
                         webView.frame.size.width, webView.frame.size.height, videoId];
     NSLog(@"%@", webView);
     [webView.mainFrame loadHTMLString:ytHTML baseURL:nil];
-//    [self performSelector:@selector(markerIsPressed:) withObject:@(99) afterDelay:5];
 }
 
 - (void)playImageForWebView:(WebView *)webView withImageURL:(NSString *)imageURL;
@@ -190,42 +214,15 @@ NSSize DefaultMediaFrameSize = {320, 180};
 
 - (void)markerIsPressed:(NSNumber *)markerId
 {
-    NSLog(@"sooooooooong laaaaaa%@", markerId);
     WebView *mediaView = [_mediaFrames objectForKey:markerId];
-
-    //CGEventRef theEvent = CGEventCreateMouseEvent(NULL, kCGEventLeftMouseDown, CGPointMake(100,100), kCGMouseButtonLeft);
-
-//    CGEventRef theEvent = CGEventCreateMouseEvent(NULL, kCGEventLeftMouseDown, CGPointMake(mediaView.frame.origin.x+mediaView.frame.size.width/2, mediaView.frame.origin.y+mediaView.frame.size.height/2), kCGMouseButtonLeft);
-    CGEventRef theEvent = CGEventCreateMouseEvent(NULL, kCGEventLeftMouseDown, CGPointMake(mediaView.frame.origin.x + mediaView.frame.size.width / 2 , [ASMarkerDetector cameraResolutionHeight] - (mediaView.frame.origin.y - mediaView.frame.size.height / 2)), kCGMouseButtonLeft);
     
-    NSLog(@"(%f,%f)",mediaView.frame.origin.x+mediaView.frame.size.width/2,mediaView.frame.origin.y+mediaView.frame.size.height/2);
+    if ([[_playStatus objectForKey:markerId] isEqual:@(PAUSE)] ) {
+       [mediaView stringByEvaluatingJavaScriptFromString:@"callPlayer('player','playVideo');"];
+    }
+    else {
+        [mediaView stringByEvaluatingJavaScriptFromString:@"callPlayer('player','pauseVideo');"];
+    }
     
-    CGEventPost(kCGHIDEventTap, theEvent);
-    CGEventSetType(theEvent, kCGEventLeftMouseUp);
-    CGEventPost(kCGHIDEventTap, theEvent);
-    
-    CGEventSetIntegerValueField(theEvent, kCGMouseEventClickState, 1);
-    
-    CGEventSetType(theEvent, kCGEventLeftMouseDown);
-    CGEventPost(kCGHIDEventTap, theEvent);
-    
-    CGEventSetType(theEvent, kCGEventLeftMouseUp);
-    CGEventPost(kCGHIDEventTap, theEvent);
-    
-    CFRelease(theEvent);
-    
-//    NSString *script;
-//    if ([[_playStatus objectForKey:markerId] isEqual:@(PLAY)]) {
-//        script = @"player.pauseVideo();";
-//    }
-//    else{
-//        script = @"player.playVideo();";
-//    }
-//    
-//    [mediaView stringByEvaluatingJavaScriptFromString:script];
-    
-
-
 }
 
 - (BOOL)markerIsVideo:(NSNumber *)markerId

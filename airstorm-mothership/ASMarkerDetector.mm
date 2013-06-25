@@ -63,7 +63,7 @@ static const int SkinRange = 22;
         if(!capture) cout << "No camera detected" << endl;
 
         cvNamedWindow( "Capture", 1 );
-        cvNamedWindow( "Skin", 1);
+//        cvNamedWindow( "Skin", 1);
 
         cameraResolutionWidth = cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_WIDTH);
         cameraResolutionHeight = cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_HEIGHT);
@@ -174,7 +174,7 @@ static const int SkinRange = 22;
                 }
             
                 cv::imshow("Capture",InImage);
-                cvShowImage("Skin", pImgCopy);
+//                cvShowImage("Skin", pImgCopy);
             }
             
             waitKey(0);
