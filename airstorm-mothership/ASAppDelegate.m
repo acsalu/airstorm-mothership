@@ -33,10 +33,10 @@ NSSize DefaultMediaFrameSize = {320, 180};
     _locationManager.delegate = self;
     [_locationManager startUpdatingLocation];
     
-    self.corner_lt = CGPointMake(0, 768);
-    self.corner_rt = CGPointMake(800, 768);
-    self.corner_rb = CGPointMake(800, 0);
-    self.corner_lb = CGPointMake(0, 0);
+    self.corner_lt = CGPointMake(100, 700);
+    self.corner_rt = CGPointMake(900, 700);
+    self.corner_rb = CGPointMake(900, 50);
+    self.corner_lb = CGPointMake(100, 50);
     
     [ASMarkerDetector sharedDetector].delegate = self;
     
@@ -103,7 +103,7 @@ NSSize DefaultMediaFrameSize = {320, 180};
     WebView *mediaView = [[WebView alloc] initWithFrame:frame];
     [self.window.contentView addSubview:mediaView];
     [_mediaFrames setObject:mediaView forKey:@(markerId)];
-    [_mediaTypes setObject:@(markerId) forKey:type];
+    [_mediaTypes setObject:type forKey:@(markerId)];
     [_playStatus setObject:@(PAUSE) forKey:@(markerId)];
     
     if ([type isEqualToString:@"video"])
@@ -126,7 +126,7 @@ NSSize DefaultMediaFrameSize = {320, 180};
                         webView.frame.size.width, webView.frame.size.height, videoId];
     NSLog(@"%@", webView);
     [webView.mainFrame loadHTMLString:ytHTML baseURL:nil];
-    [self performSelector:@selector(markerIsPressed:) withObject:@(99) afterDelay:5];
+//    [self performSelector:@selector(markerIsPressed:) withObject:@(99) afterDelay:5];
 }
 
 - (void)playImageForWebView:(WebView *)webView withImageURL:(NSString *)imageURL;
@@ -143,6 +143,7 @@ NSSize DefaultMediaFrameSize = {320, 180};
     WebView *mediaView = [_mediaFrames objectForKey:markerId];
     [mediaView removeFromSuperview];
     [_mediaFrames removeObjectForKey:markerId];
+    [_mediaTypes removeObjectForKey:markerId];
     [_playStatus removeObjectForKey:markerId];
 }
 
@@ -229,7 +230,8 @@ NSSize DefaultMediaFrameSize = {320, 180};
 
 - (BOOL)markerIsVideo:(NSNumber *)markerId
 {
-    return [((NSString *)[_mediaTypes objectForKey:markerId]) isEqualToString:@"video"]? YES:NO;
+    NSString *type = [_mediaTypes objectForKey:markerId];
+    return [type isEqualToString:@"video"];
 }
 
 - (void)setCornerLeftTop:(CGPoint)point

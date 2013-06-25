@@ -135,7 +135,7 @@ static const int SkinRange = 22;
                     [_delegate detectMarkerId:marker.id atAbsPosition:mediaFrameOrigin];
                     
                     // skin detection
-                    if (![_delegate markerIsVideo:@(marker.id)]) continue;
+                    if ([_delegate markerIsVideo:@(marker.id)] == NO) continue;
                     
                     NSRect nsRect = [_delegate getFrameOfMarker:@(marker.id)];
                     if (nsRect.origin.x == -1000) continue;
@@ -149,12 +149,13 @@ static const int SkinRange = 22;
                                                 (mediaFrameOrigin.y + (DefaultMediaFrameSize.height/2 + DefaultMediaFrameSize.height/10)),
                                                 DefaultMediaFrameSize.width/4,
                                                 DefaultMediaFrameSize.height/4);
+                    if (roiRect.x+roiRect.width > cameraResolutionWidth || roiRect.y+ roiRect.height > cameraResolutionHeight) continue;
                     cv::Mat roiImg = mat_bw(roiRect);
                     
 //                    cv::Rect redRect = cv::Rect(markerCenter.x + (DefaultMediaFrameSize.width/2 - DefaultMediaFrameSize.width/10),
 //                                                markerCenter.y + (DefaultMediaFrameSize.height/2 + DefaultMediaFrameSize.height/10),
 //                                                40, 40);
-                    cvRectangleR(pImgCopy, roiRect, Scalar(0,0,250));
+                    cvRectangleR(iplImg, roiRect, Scalar(0,0,250));
                     
                     int count, count_rev, thresholdNumOfPixel;
                     count = count_rev = 0;
@@ -179,7 +180,7 @@ static const int SkinRange = 22;
             waitKey(0);
             
             cvDestroyWindow("Capture");
-            cvDestroyWindow("Skin");
+//            cvDestroyWindow("Skin");
             
         }
         
