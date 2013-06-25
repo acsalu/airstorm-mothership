@@ -122,7 +122,7 @@ NSSize DefaultMediaFrameSize = {320, 240};
                         src='http://www.youtube.com/embed/%@'></iframe>", webView.frame.size.width, webView.frame.size.height, videoId];
 
     [webView.mainFrame loadHTMLString:ytHTML baseURL:nil];
-    [self performSelector:@selector(markerIsPressed:) withObject:nil afterDelay:3];
+    [self performSelector:@selector(markerIsPressed:) withObject:@(99) afterDelay:10];
 }
 
 - (void)playImageForWebView:(WebView *)webView withImageURL:(NSString *)imageURL;
@@ -187,16 +187,36 @@ NSSize DefaultMediaFrameSize = {320, 240};
 {
     NSLog(@"sooooooooong laaaaaa%@", markerId);
     WebView *mediaView = [_mediaFrames objectForKey:markerId];
+    //CGEventRef theEvent = CGEventCreateMouseEvent(NULL, kCGEventLeftMouseDown, CGPointMake(100,100), kCGMouseButtonLeft);
+
+//    CGEventRef theEvent = CGEventCreateMouseEvent(NULL, kCGEventLeftMouseDown, CGPointMake(mediaView.frame.origin.x+mediaView.frame.size.width/2, mediaView.frame.origin.y+mediaView.frame.size.height/2), kCGMouseButtonLeft);
+    CGEventRef theEvent = CGEventCreateMouseEvent(NULL, kCGEventLeftMouseDown, CGPointMake(mediaView.frame.origin.x + 100, mediaView.frame.origin.y + 50), kCGMouseButtonLeft);
     
-    NSString *script;
-    if ([[_playStatus objectForKey:markerId] isEqual:@(PLAY)]) {
-        script = @"player.pauseVideo();";
-    }
-    else{
-        script = @"player.playVideo();";
-    }
+    NSLog(@"(%f,%f)",mediaView.frame.origin.x+mediaView.frame.size.width/2,mediaView.frame.origin.y+mediaView.frame.size.height/2);
     
-    [mediaView stringByEvaluatingJavaScriptFromString:script];
+    CGEventPost(kCGHIDEventTap, theEvent);
+    CGEventSetType(theEvent, kCGEventLeftMouseUp);
+    CGEventPost(kCGHIDEventTap, theEvent);
+    
+    CGEventSetIntegerValueField(theEvent, kCGMouseEventClickState, 1);
+    
+    CGEventSetType(theEvent, kCGEventLeftMouseDown);
+    CGEventPost(kCGHIDEventTap, theEvent);
+    
+    CGEventSetType(theEvent, kCGEventLeftMouseUp);
+    CGEventPost(kCGHIDEventTap, theEvent);
+    
+    CFRelease(theEvent);
+    
+//    NSString *script;
+//    if ([[_playStatus objectForKey:markerId] isEqual:@(PLAY)]) {
+//        script = @"player.pauseVideo();";
+//    }
+//    else{
+//        script = @"player.playVideo();";
+//    }
+//    
+//    [mediaView stringByEvaluatingJavaScriptFromString:script];
     
 }
 
