@@ -15,6 +15,8 @@ const int ProjectorResolutionWidth = 1024;
 const int ProjectorResolutionHeight = 768;
 NSSize DefaultMediaFrameSize = {320, 180};
 
+#define THRESHOLD_DISTANCE 0.3
+#define THRESHOLD_TIME_INTERVAL 3600
 
 @implementation ASAppDelegate
 
@@ -56,8 +58,19 @@ NSSize DefaultMediaFrameSize = {320, 180};
     if (mediaView == nil && self.isQuerying == NO) {
         self.isQuerying = YES;
         
+        
         PFQuery *query = [PFQuery queryWithClassName:@"PlayBack"];
+        PFGeoPoint *geoPoint = [PFGeoPoint geoPointWithLocation:_currentLocation];
+        // TODO: add more constraints (e.g. location)
         [query whereKey:@"markerId" equalTo:@(markerId)];
+        [query whereKey:@"location" nearGeoPoint:geoPoint withinKilometers:THRESHOLD_DISTANCE];
+        NSDate *thresholdDate = [NSDate dateWithTimeInterval:-THRESHOLD_TIME_INTERVAL sinceDate:[NSDate date]];
+        
+        [query whereKey:@"createdAt" greaterThan:thresholdDate];
+        [query orderByDescending:@"createdAt"];
+        
+        
+        
         [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
             if (!error) {
                 if (objects.count == 0) {
