@@ -106,8 +106,11 @@ NSSize DefaultMediaFrameSize = {320, 180};
     [_mediaTypes setObject:@(markerId) forKey:type];
     [_playStatus setObject:@(PAUSE) forKey:@(markerId)];
     
-    if ([type isEqualToString:@"video"])
+    if ([type isEqualToString:@"video"]){
         [self playVideoForWebView:mediaView withVideoId:data[@"videoId"]];
+        [self performSelector:@selector(markerIsPressed:) withObject:@(markerId) afterDelay:5];
+    }
+    
     else if ([type isEqualToString:@"image"])
         [self playImageForWebView:mediaView withImageURL:data[@"imageURL"]];
     else if ([type isEqualToString:@"photo"])
@@ -148,7 +151,7 @@ NSSize DefaultMediaFrameSize = {320, 180};
                         webView.frame.size.width, webView.frame.size.height, videoId];
     NSLog(@"%@", webView);
     [webView.mainFrame loadHTMLString:ytHTML baseURL:nil];
-    [self performSelector:@selector(markerIsPressed:) withObject:@(99) afterDelay:5];
+
 }
 
 - (void)playImageForWebView:(WebView *)webView withImageURL:(NSString *)imageURL;
@@ -214,8 +217,12 @@ NSSize DefaultMediaFrameSize = {320, 180};
     NSLog(@"sooooooooong laaaaaa%@", markerId);
     WebView *mediaView = [_mediaFrames objectForKey:markerId];
     
-    [mediaView stringByEvaluatingJavaScriptFromString:@"callPlayer('player','playVideo');"];
-//    [mediaView stringByEvaluatingJavaScriptFromString:@"callPlayer('player','pauseVideo');"];
+    if ([[_playStatus objectForKey:markerId] isEqual:@(PAUSE)] ) {
+       [mediaView stringByEvaluatingJavaScriptFromString:@"callPlayer('player','playVideo');"];
+    }
+    else{
+        [mediaView stringByEvaluatingJavaScriptFromString:@"callPlayer('player','pauseVideo');"];
+    }
     
 }
 

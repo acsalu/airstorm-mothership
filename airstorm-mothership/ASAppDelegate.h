@@ -15,8 +15,9 @@ extern const int ProjectorResolutionWidth;
 extern const int ProjectorResolutionHeight;
 extern NSSize DefaultMediaFrameSize;
 
+#define PAUSE 0
 #define PLAY 1
-#define PAUSE 2
+
 
 @class PFGeoPoint;
 
