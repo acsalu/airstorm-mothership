@@ -25,7 +25,7 @@ NSSize DefaultMediaFrameSize = {320, 180};
     [Parse setApplicationId:@"n7N5WY2FgddzT9GagvvgEgNFYR4u2iRjP4CkCKK3"
                   clientKey:@"YzqN7TkJitqR9N2bCyfiaHyeJ4hM8ovEOoE69le7"];
     
-    _isQuerying = _isPressing = NO;
+    _isQuerying = _isPressing = _isPreparingToHideAnchor = NO;
     
     [_window setBackgroundColor:[NSColor blackColor]];
     _mediaFrames = [NSMutableDictionary dictionary];
@@ -121,11 +121,8 @@ NSSize DefaultMediaFrameSize = {320, 180};
     [_mediaTypes setObject:type forKey:@(markerId)];
     [_playStatus setObject:@(PAUSE) forKey:@(markerId)];
     
-    if ([type isEqualToString:@"video"]){
+    if ([type isEqualToString:@"video"])
         [self playVideoForWebView:mediaView withVideoId:data[@"videoId"]];
-//        [self performSelector:@selector(markerIsPressed:) withObject:@(markerId) afterDelay:5];
-    }
-    
     else if ([type isEqualToString:@"image"])
         [self playImageForWebView:mediaView withImageURL:data[@"imageURL"]];
     else if ([type isEqualToString:@"photo"])
@@ -208,8 +205,8 @@ NSSize DefaultMediaFrameSize = {320, 180};
     float projectionImageWidth = _corner_rt.x - _corner_lb.x;
     float projectionImageHeight = _corner_rt.y - _corner_lb.y;
     
-    float x = (absPosiotn.x - self.corner_lb.x) * ProjectorResolutionWidth/projectionImageWidth;
-    float y = (absPosiotn.y - self.corner_lb.y) * ProjectorResolutionHeight/projectionImageHeight;
+    float x = (absPosiotn.x - self.corner_lb.x) * ProjectorResolutionWidth / projectionImageWidth;
+    float y = (absPosiotn.y - self.corner_lb.y) * ProjectorResolutionHeight / projectionImageHeight;
     
     return CGPointMake(x, y);
 }
@@ -237,7 +234,6 @@ NSSize DefaultMediaFrameSize = {320, 180};
     if ([[_playStatus objectForKey:markerId] isEqual:@(PAUSE)] ) {
         [mediaView stringByEvaluatingJavaScriptFromString:@"callPlayer('player','playVideo');"];
         [_playStatus setObject:@(PLAY) forKey:markerId];
-
         [self performSelector:@selector(setIsPressing:) withObject:NO afterDelay:1];
     }
     else {
@@ -254,24 +250,70 @@ NSSize DefaultMediaFrameSize = {320, 180};
     return [type isEqualToString:@"video"];
 }
 
-- (void)setCornerLeftTop:(CGPoint)point
+- (void)setCornerLeftTopWithMarkerCenter:(CGPoint)center andOffset:(CGPoint)offset
 {
-    _corner_lt = point;
+    if (ABS(center.x - _corner_lt.y) > offset.x * 1.5 || ABS(center.y - _corner_lt.y) > offset.y * 1.5) {
+        [self stopHideAnchor];
+    }
+    _corner_lt = CGPointMake(center.x - offset.x, center.y + offset.y);
 }
 
-- (void)setCornerRightTop:(CGPoint)point;
+- (void)setCornerRightTopWithMarkerCenter:(CGPoint)center andOffset:(CGPoint)offset
 {
-    _corner_rt = point;
+    if (ABS(center.x - _corner_rt.y) > offset.x * 1.5 || ABS(center.y - _corner_rt.y) > offset.y * 1.5) {
+        [self stopHideAnchor];
+    }
+    _corner_rt = CGPointMake(center.x + offset.x, center.y + offset.y);
 }
 
-- (void)setCornerRightBottom:(CGPoint)point;
+- (void)setCornerRightBottomWithMarkerCenter:(CGPoint)center andOffset:(CGPoint)offset
 {
-    _corner_rb = point;
+    if (ABS(center.x - _corner_rb.y) > offset.x * 1.5 || ABS(center.y - _corner_rb.y) > offset.y * 1.5) {
+        [self stopHideAnchor];
+    }
+    _corner_rb = CGPointMake(center.x + offset.x, center.y - offset.y);
 }
 
-- (void)setCornerLeftBottom:(CGPoint)point;
+- (void)setCornerLeftBottomWithMarkerCenter:(CGPoint)center andOffset:(CGPoint)offset;
 {
-    _corner_lb = point;
+    if (ABS(center.x - _corner_lb.y) > offset.x * 1.5 || ABS(center.y - _corner_lb.y) > offset.y * 1.5) {
+        [self stopHideAnchor];
+    }
+    _corner_lb = CGPointMake(center.x - offset.x, center.y - offset.y);
+}
+
+- (void)stopHideAnchor
+{
+    if (_anchorView0.isHidden) return;
+    
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideAllAnchor) object:nil];
+    _isPreparingToHideAnchor = NO;
+}
+
+- (void)prepareToHideAnchor
+{
+    if (_isPreparingToHideAnchor) return;
+    else {
+        [self performSelector:@selector(hideAllAnchor) withObject:nil afterDelay:3];
+        _isPreparingToHideAnchor = YES;
+    }
+}
+
+- (void)hideAllAnchor
+{
+    [_anchorView0 setHidden:YES];
+    [_anchorView1 setHidden:YES];
+    [_anchorView2 setHidden:YES];
+    [_anchorView3 setHidden:YES];
+}
+
+- (void)resetAnchor
+{
+    [_anchorView0 setHidden:NO];
+    [_anchorView1 setHidden:NO];
+    [_anchorView2 setHidden:NO];
+    [_anchorView3 setHidden:NO];
+    _isPreparingToHideAnchor = NO;
 }
 
 @end

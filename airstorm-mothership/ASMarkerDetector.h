@@ -11,15 +11,17 @@
 @protocol ASDetectorDelegate <NSObject>
 
 @required
-- (void)setCornerLeftTop:(CGPoint)point;
-- (void)setCornerRightTop:(CGPoint)point;
-- (void)setCornerRightBottom:(CGPoint)point;
-- (void)setCornerLeftBottom:(CGPoint)point;
+- (void)setCornerLeftTopWithMarkerCenter:(CGPoint)center andOffset:(CGPoint)offset;
+- (void)setCornerRightTopWithMarkerCenter:(CGPoint)center andOffset:(CGPoint)offset;
+- (void)setCornerRightBottomWithMarkerCenter:(CGPoint)center andOffset:(CGPoint)offset;
+- (void)setCornerLeftBottomWithMarkerCenter:(CGPoint)center andOffset:(CGPoint)offset;
 
 - (void)detectMarkerId:(int)markerId atAbsPosition:(CGPoint)absPosition;
 - (void)markerIsPressed:(NSNumber *)markerId;
 
 - (BOOL)markerIsVideo:(NSNumber *)markerId;
+- (void)prepareToHideAnchor;
+- (void)stopHideAnchor;
 // QQ
 - (NSRect)getFrameOfMarker:(NSNumber *)markerId;
 - (float)scaleRatioOfProjection;
@@ -28,6 +30,7 @@
 @interface ASMarkerDetector : NSObject
 
 @property (weak, nonatomic) id<ASDetectorDelegate> delegate;
+@property BOOL isAnchor0Set, isAnchor1Set, isAnchor2Set, isAnchor3Set;
 
 + (ASMarkerDetector *)sharedDetector;
 

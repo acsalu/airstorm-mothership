@@ -105,6 +105,7 @@ static const int SkinRange = 22;
                 // Ok, let's detect marker
                 MDetector.detect(InImage,Markers,CamParam,MarkerSize);
                 
+//                _isAnchor0Set = _isAnchor1Set = _isAnchor2Set = _isAnchor3Set = NO;
                 for (unsigned int i=0; i<Markers.size(); i++) {
                     aruco::Marker marker = Markers[i];
                     //for each marker, draw info and its boundaries in the image
@@ -113,18 +114,23 @@ static const int SkinRange = 22;
                     CvDrawingUtils::draw3dCube(InImage, marker, CamParam);
                     
                     CGPoint markerCenter = [self centerOfMarkerInCGPoint:marker];
+                    CGPoint centerToEdgeDis = [self centerToEdgeDistanceOfMarker:marker];
                     
                     if (marker.id == 0) {
-                        [_delegate setCornerLeftTop:markerCenter];
+                        [_delegate setCornerLeftTopWithMarkerCenter:markerCenter andOffset:centerToEdgeDis];
+                        _isAnchor0Set = YES;
                         continue;
                     } else if (marker.id == 1) {
-                        [_delegate setCornerRightTop:markerCenter];
+                        [_delegate setCornerLeftTopWithMarkerCenter:markerCenter andOffset:centerToEdgeDis];
+                        _isAnchor1Set = YES;
                         continue;
                     } else if (marker.id == 2) {
-                        [_delegate setCornerRightBottom:markerCenter];
+                        [_delegate setCornerLeftTopWithMarkerCenter:markerCenter andOffset:centerToEdgeDis];
+                        _isAnchor2Set = YES;
                         continue;
                     } else if (marker.id == 3) {
-                        [_delegate setCornerLeftBottom:markerCenter];
+                        [_delegate setCornerLeftTopWithMarkerCenter:markerCenter andOffset:centerToEdgeDis];
+                        _isAnchor3Set = YES;
                         continue;
                     }
                     
@@ -155,7 +161,7 @@ static const int SkinRange = 22;
 //                    cv::Rect redRect = cv::Rect(markerCenter.x + (DefaultMediaFrameSize.width/2 - DefaultMediaFrameSize.width/10),
 //                                                markerCenter.y + (DefaultMediaFrameSize.height/2 + DefaultMediaFrameSize.height/10),
 //                                                40, 40);
-                    cvRectangleR(iplImg, roiRect, Scalar(0,250,0),5);
+                    cvRectangleR(iplImg, roiRect, Scalar(0, 250, 0), 5);
                     
                     int count, count_rev, thresholdNumOfPixel;
                     count = count_rev = 0;
@@ -172,7 +178,12 @@ static const int SkinRange = 22;
                     }
                 
                 }
-            
+                if (_isAnchor0Set & _isAnchor1Set & _isAnchor2Set & _isAnchor3Set) {
+                    [_delegate prepareToHideAnchor];
+                    _isAnchor0Set = _isAnchor1Set = _isAnchor2Set = _isAnchor3Set = NO;
+                }
+//                else [_delegate stopHideAnchor];
+                
                 cv::imshow("Capture",InImage);
 //                cvShowImage("Skin", pImgCopy);
             }
@@ -219,6 +230,15 @@ static const int SkinRange = 22;
     float offset_y = (ABS(marker[0].y - marker[2].y) + ABS(marker[1].y - marker[3].y)) / 4;
     
     return CGPointMake(x + offset_x, y + offset_y);
+}
+
+- (CGPoint)centerToEdgeDistanceOfMarker:(aruco::Marker)marker
+{
+    float center_x = (marker[0].x + marker[1].x + marker[2].x + marker[3].x)/4;
+    float center_y = (marker[0].y + marker[1].y + marker[2].y + marker[3].y)/4;
+    float dis_x = ABS(marker[0].x - center_x) + ABS(marker[1].x - center_x) + ABS(marker[2].x - center_x) + ABS(marker[3].x - center_x);
+    float dis_y = ABS(marker[0].y - center_y) + ABS(marker[1].y - center_y) + ABS(marker[2].y - center_y) + ABS(marker[3].y - center_y);
+    return CGPointMake(dis_x / 4, dis_y / 4);
 }
 
 cv::Rect nsRectToCVRect(NSRect nsRect)
