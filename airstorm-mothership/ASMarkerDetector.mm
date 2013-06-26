@@ -121,15 +121,15 @@ static const int SkinRange = 22;
                         _isAnchor0Set = YES;
                         continue;
                     } else if (marker.id == 1) {
-                        [_delegate setCornerLeftTopWithMarkerCenter:markerCenter andOffset:centerToEdgeDis];
+                        [_delegate setCornerRightTopWithMarkerCenter:markerCenter andOffset:centerToEdgeDis];
                         _isAnchor1Set = YES;
                         continue;
                     } else if (marker.id == 2) {
-                        [_delegate setCornerLeftTopWithMarkerCenter:markerCenter andOffset:centerToEdgeDis];
+                        [_delegate setCornerRightBottomWithMarkerCenter:markerCenter andOffset:centerToEdgeDis];
                         _isAnchor2Set = YES;
                         continue;
                     } else if (marker.id == 3) {
-                        [_delegate setCornerLeftTopWithMarkerCenter:markerCenter andOffset:centerToEdgeDis];
+                        [_delegate setCornerLeftBottomWithMarkerCenter:markerCenter andOffset:centerToEdgeDis];
                         _isAnchor3Set = YES;
                         continue;
                     }
@@ -185,7 +185,7 @@ static const int SkinRange = 22;
 //                else [_delegate stopHideAnchor];
                 
                 cv::imshow("Capture",InImage);
-//                cvShowImage("Skin", pImgCopy);
+//                cvShowImage("Skin", im_gray);
             }
             
             waitKey(0);

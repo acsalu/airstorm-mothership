@@ -62,13 +62,13 @@ NSSize DefaultMediaFrameSize = {320, 180};
         
         
         PFQuery *query = [PFQuery queryWithClassName:@"PlayBack"];
-        PFGeoPoint *geoPoint = [PFGeoPoint geoPointWithLocation:_currentLocation];
+//        PFGeoPoint *geoPoint = [PFGeoPoint geoPointWithLocation:_currentLocation];
         // TODO: add more constraints (e.g. location)
         [query whereKey:@"markerId" equalTo:@(markerId)];
-        [query whereKey:@"location" nearGeoPoint:geoPoint withinKilometers:THRESHOLD_DISTANCE];
-        NSDate *thresholdDate = [NSDate dateWithTimeInterval:-THRESHOLD_TIME_INTERVAL sinceDate:[NSDate date]];
-        
-        [query whereKey:@"createdAt" greaterThan:thresholdDate];
+//        [query whereKey:@"location" nearGeoPoint:geoPoint withinKilometers:THRESHOLD_DISTANCE];
+//        NSDate *thresholdDate = [NSDate dateWithTimeInterval:-THRESHOLD_TIME_INTERVAL sinceDate:[NSDate date]];
+//        
+//        [query whereKey:@"createdAt" greaterThan:thresholdDate];
         [query orderByDescending:@"createdAt"];
         
         
@@ -253,33 +253,37 @@ NSSize DefaultMediaFrameSize = {320, 180};
 - (void)setCornerLeftTopWithMarkerCenter:(CGPoint)center andOffset:(CGPoint)offset
 {
     if (ABS(center.x - _corner_lt.y) > offset.x * 1.5 || ABS(center.y - _corner_lt.y) > offset.y * 1.5) {
-        [self stopHideAnchor];
+//        [self stopHideAnchor];
     }
     _corner_lt = CGPointMake(center.x - offset.x, center.y + offset.y);
+//    _corner_lt = center;
 }
 
 - (void)setCornerRightTopWithMarkerCenter:(CGPoint)center andOffset:(CGPoint)offset
 {
     if (ABS(center.x - _corner_rt.y) > offset.x * 1.5 || ABS(center.y - _corner_rt.y) > offset.y * 1.5) {
-        [self stopHideAnchor];
+//        [self stopHideAnchor];
     }
     _corner_rt = CGPointMake(center.x + offset.x, center.y + offset.y);
+//    _corner_rt = center;
 }
 
 - (void)setCornerRightBottomWithMarkerCenter:(CGPoint)center andOffset:(CGPoint)offset
 {
     if (ABS(center.x - _corner_rb.y) > offset.x * 1.5 || ABS(center.y - _corner_rb.y) > offset.y * 1.5) {
-        [self stopHideAnchor];
+//        [self stopHideAnchor];
     }
     _corner_rb = CGPointMake(center.x + offset.x, center.y - offset.y);
+//    _corner_rb = center;
 }
 
 - (void)setCornerLeftBottomWithMarkerCenter:(CGPoint)center andOffset:(CGPoint)offset;
 {
     if (ABS(center.x - _corner_lb.y) > offset.x * 1.5 || ABS(center.y - _corner_lb.y) > offset.y * 1.5) {
-        [self stopHideAnchor];
+//        [self stopHideAnchor];
     }
     _corner_lb = CGPointMake(center.x - offset.x, center.y - offset.y);
+//    _corner_lb = center;
 }
 
 - (void)stopHideAnchor
